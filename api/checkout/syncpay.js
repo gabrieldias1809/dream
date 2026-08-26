@@ -43,40 +43,71 @@ module.exports = async function handler(req, res) {
     if (syncpayApiKey) {
       try {
         console.log(`[SyncPay Checkout] Chamando API SyncPay para a sessão ${sessionId}...`);
-        const response = await fetch(`${syncpayApiUrl}/cash-in`, {
+        
+        // SyncPay endpoints to try (V1 partner or V1 standard)
+        const primaryEndpoint = syncpayApiUrl.includes('/api/partner')
+          ? `${syncpayApiUrl}/cash-in`
+          : `${syncpayApiUrl}/api/partner/v1/cash-in`;
+
+        const payload = {
+          amount: price,
+          description: 'Revelação de Esboço da Alma Gêmea - AuraSketch AI',
+          webhook_url: callbackUrl,
+          callbackUrl: callbackUrl,
+          client: {
+            name: userName || 'Cliente AuraSketch',
+            email: userEmail || session.userEmail || 'cliente@aurasketch.com'
+          },
+          customer: {
+            name: userName || 'Cliente AuraSketch',
+            email: userEmail || session.userEmail || 'cliente@aurasketch.com'
+          },
+          metadata: {
+            sessionId: session.sessionId,
+            orderId: session.orderId
+          }
+        };
+
+        let response = await fetch(primaryEndpoint, {
           method: 'POST',
           headers: {
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${syncpayApiKey}`
           },
-          body: JSON.stringify({
-            amount: price,
-            description: 'Revelação de Esboço da Alma Gêmea - AuraSketch AI',
-            customer: {
-              name: userName || 'Cliente AuraSketch',
-              email: userEmail || session.userEmail || 'cliente@aurasketch.com'
-            },
-            metadata: {
-              sessionId: session.sessionId,
-              orderId: session.orderId
-            },
-            callbackUrl: callbackUrl
-          })
+          body: JSON.stringify(payload)
         });
+
+        // Fallback to /v1/cash-in if partner route returns 404
+        if (!response.ok && response.status === 404) {
+          const fallbackEndpoint = `${syncpayApiUrl.replace(/\/api\/partner\/v1|\/v1/, '')}/v1/cash-in`;
+          response = await fetch(fallbackEndpoint, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${syncpayApiKey}`
+            },
+            body: JSON.stringify(payload)
+          });
+        }
 
         if (response.ok) {
           const syncData = await response.json();
+          const qrcode = syncData.qr_code_base64 || syncData.qrcode || syncData.qr_code || syncData.pix_qr_code || null;
+          const emv = syncData.pix_copy_paste || syncData.emv || syncData.pix_code || syncData.pix_copia_cola || null;
+
           transactionData = {
-            transactionId: syncData.id || syncData.transaction_id || `sync_${Date.now()}`,
+            transactionId: syncData.id || syncData.identifier || syncData.transaction_id || `sync_${Date.now()}`,
             amount: price,
-            pixQrCode: syncData.qr_code_base64 || syncData.qrcode || syncData.qr_code || null,
-            pixCopiaCola: syncData.pix_copy_paste || syncData.emv || syncData.pix_code || null,
+            pixQrCode: qrcode ? (qrcode.startsWith('data:') || qrcode.startsWith('http') ? qrcode : `data:image/png;base64,${qrcode}`) : null,
+            pixCopiaCola: emv,
             checkoutUrl: syncData.payment_url || syncData.checkout_url || null,
             isSandbox: false
           };
         } else {
           const errBody = await response.text();
-          console.warn('[SyncPay Checkout] Falha na chamada da API SyncPay, usando modo fallback seguro:', errBody);
+          console.warn('[SyncPay Checkout] Falha na resposta da API SyncPay:', response.status, errBody);
         }
       } catch (apiErr) {
         console.warn('[SyncPay Checkout] Erro de rede ao conectar com SyncPay:', apiErr.message);
