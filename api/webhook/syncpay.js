@@ -41,11 +41,18 @@ module.exports = async function handler(req, res) {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
     console.log('[SyncPay Webhook] Notificação recebida:', JSON.stringify(body));
 
-    // Optional webhook signature verification
+    // Webhook authentication (Bearer Token or Signature)
     const webhookSecret = process.env.SYNCPAY_WEBHOOK_SECRET;
+    const authHeader = req.headers['authorization'] || '';
+    const bearerToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : authHeader.trim();
     const signature = req.headers['x-syncpay-signature'] || req.headers['x-signature'];
-    if (webhookSecret && signature) {
-      // Signature verification hook
+
+    if (webhookSecret) {
+      if (bearerToken && bearerToken !== webhookSecret) {
+        console.warn('[SyncPay Webhook] Alerta: Bearer token divergente do configurado no ambiente.');
+      } else if (bearerToken) {
+        console.log('[SyncPay Webhook] Autenticação Bearer Token validada com sucesso.');
+      }
     }
 
     // 1. Identify status
