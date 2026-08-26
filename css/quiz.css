@@ -225,21 +225,27 @@
 
 .paywall-preview-card {
   position: relative;
-  background: #FFFFFF;
-  border-radius: var(--radius-xl);
-  padding: 0.875rem;
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-lg);
-  max-width: 280px;
+  border-radius: var(--radius-lg);
+  background-color: #FFFFFF;
+  padding: 0.75rem;
+  border: 1.5px solid rgba(124, 58, 237, 0.25);
+  box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  max-width: 270px;
   margin: 1.25rem auto 1.5rem;
   overflow: hidden;
+  transition: transform var(--transition-base);
+}
+
+.paywall-preview-card:hover {
+  transform: translateY(-2px);
 }
 
 .paywall-blur-image {
   width: 100%;
   border-radius: var(--radius-md);
-  filter: blur(12px) contrast(0.95);
-  transform: scale(1.04);
+  filter: blur(9px) contrast(1.05);
+  transform: scale(1.06);
+  display: block;
 }
 
 .paywall-lock-overlay {
@@ -249,23 +255,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 23, 42, 0.25);
-  backdrop-filter: blur(3px);
+  background: radial-gradient(circle at center, rgba(15, 23, 42, 0.35) 0%, rgba(15, 23, 42, 0.6) 100%);
+  backdrop-filter: blur(2px);
   color: #FFFFFF;
   gap: 0.4rem;
 }
 
 .paywall-badge {
-  background: rgba(15, 23, 42, 0.85);
-  padding: 0.4rem 0.85rem;
+  background: rgba(15, 23, 42, 0.9);
+  padding: 0.45rem 0.95rem;
   border-radius: var(--radius-pill);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 700;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  gap: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .email-input-box {

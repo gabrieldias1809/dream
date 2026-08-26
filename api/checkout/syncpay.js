@@ -33,7 +33,7 @@ module.exports = async function handler(req, res) {
       }
     }
 
-    const price = parseFloat(process.env.PRICE_BRL || '29.90');
+    const price = parseFloat(process.env.PRICE_BRL || '1.00');
     const syncpayApiKey = process.env.SYNCPAY_API_KEY;
     const syncpayApiUrl = process.env.SYNCPAY_API_URL || 'https://api.syncpay.com.br';
     
@@ -144,6 +144,7 @@ module.exports = async function handler(req, res) {
       sessionId: session.sessionId,
       sessionToken: session.sessionToken,
       orderId: session.orderId,
+      previewUrl: session.previewUrl,
       amount: transactionData.amount,
       formattedPrice: `R$ ${transactionData.amount.toFixed(2).replace('.', ',')}`,
       transactionId: transactionData.transactionId,

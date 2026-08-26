@@ -613,6 +613,9 @@ class QuizEngine {
   renderPixCheckoutScreen(checkoutData) {
     this.stepIndicator.textContent = 'Aguardando Pagamento Pix • Liberação Automática';
 
+    const isMale = this.answers.atracao_genero === 'Homens';
+    const previewImg = checkoutData.previewUrl || (isMale ? '/assets/images/male_sketch.jpg' : '/assets/images/hero_sketch.jpg');
+
     this.body.innerHTML = `
       <div class="pix-checkout-wrapper quiz-slide-enter">
         <div class="pix-header-badge">
@@ -623,14 +626,26 @@ class QuizEngine {
         <h3 class="quiz-question-title" style="font-size: 1.35rem; margin-bottom: 0.25rem;">
           Pague via Pix para Desbloquear
         </h3>
-        <p class="quiz-question-desc" style="max-width: 440px; margin: 0 auto 1.25rem;">
-          A liberação da sua arte e relatório é <strong>instantânea</strong> assim que o pagamento for concluído.
+        <p class="quiz-question-desc" style="max-width: 440px; margin: 0 auto 1rem;">
+          A liberação da sua arte em alta resolução e relatório é <strong>instantânea</strong>.
         </p>
+
+        <!-- Preview do Esboço Borrado com Cadeado -->
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.85rem; background: var(--bg-lavender); border-radius: var(--radius-lg); padding: 0.65rem 1rem; margin-bottom: 1.15rem; border: 1px solid rgba(124, 58, 237, 0.2);">
+          <div style="position: relative; width: 48px; height: 48px; border-radius: var(--radius-md); overflow: hidden; border: 1.5px solid var(--primary); flex-shrink: 0; box-shadow: var(--shadow-sm);">
+            <img src="${previewImg}" alt="Esboço Bloqueado" style="width: 100%; height: 100%; object-fit: cover; filter: blur(5px); transform: scale(1.08);" />
+            <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.4); color: #fff; font-size: 0.8125rem;">🔒</div>
+          </div>
+          <div style="text-align: left; font-size: 0.8125rem;">
+            <strong style="color: var(--text-headline); display: block; font-size: 0.875rem;">Retrato Gerado & Bloqueado</strong>
+            <span style="color: var(--primary); font-weight: 700; font-size: 0.75rem;">✦ 98.7% Compatibilidade Arquetípica</span>
+          </div>
+        </div>
 
         <div class="pix-card-container">
           <div class="pix-price-tag">
-            <span style="font-size: 0.9375rem; color: var(--text-muted); font-weight: 600;">Valor:</span>
-            <span class="pix-price-val">${checkoutData.formattedPrice || 'R$ 29,90'}</span>
+            <span style="font-size: 0.9375rem; color: var(--text-muted); font-weight: 600;">Valor Promocional:</span>
+            <span class="pix-price-val">${checkoutData.formattedPrice || 'R$ 1,00'}</span>
           </div>
 
           <div class="pix-qrcode-box">
@@ -655,7 +670,7 @@ class QuizEngine {
             <ul class="pix-steps-list">
               <li><span class="num">1.</span> Abra o aplicativo do seu banco ou carteira digital</li>
               <li><span class="num">2.</span> Escolha <strong>Pagar via Pix</strong> > Copia e Cola ou QR Code</li>
-              <li><span class="num">3.</span> Confirme o pagamento de ${checkoutData.formattedPrice || 'R$ 29,90'}</li>
+              <li><span class="num">3.</span> Confirme o pagamento de ${checkoutData.formattedPrice || 'R$ 1,00'}</li>
             </ul>
           </div>
 
@@ -668,10 +683,6 @@ class QuizEngine {
         <div style="display: flex; flex-direction: column; gap: 0.6rem;">
           <button class="btn btn-secondary" id="pixManualCheckBtn" style="width: 100%; font-size: 0.9375rem;">
             <span>🔄 Já Paguei (Verificar Agora)</span>
-          </button>
-          
-          <button class="btn btn-primary" id="pixSimulateDemoBtn" style="width: 100%; font-size: 0.875rem; background: linear-gradient(135deg, #10B981, #059669); border: none;">
-            <span>⚡ Simular Pagamento Instantâneo (Demonstração)</span>
           </button>
         </div>
 
@@ -713,15 +724,6 @@ class QuizEngine {
       manualBtn.addEventListener('click', () => {
         manualBtn.innerHTML = '<span>Verificando...</span>';
         this.checkPaymentStatus(checkoutData.sessionId, true);
-      });
-    }
-
-    // 5. Simulate Demo button
-    const demoBtn = document.getElementById('pixSimulateDemoBtn');
-    if (demoBtn) {
-      demoBtn.addEventListener('click', async () => {
-        demoBtn.innerHTML = '<span>Processando IA...</span>';
-        await this.triggerSimulation();
       });
     }
   }
