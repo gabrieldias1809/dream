@@ -175,6 +175,7 @@ class QuizEngine {
     this.progressFill = document.getElementById('quizProgressFill');
     this.stepIndicator = document.getElementById('quizStepIndicator');
     this.closeBtn = document.getElementById('quizCloseBtn');
+    this.backBtn = document.getElementById('quizBackBtn');
     this.synchroModal = document.getElementById('synchroPopupModal');
 
     this.init();
@@ -205,6 +206,10 @@ class QuizEngine {
       this.closeBtn.addEventListener('click', () => this.closeModal());
     }
 
+    if (this.backBtn) {
+      this.backBtn.addEventListener('click', () => this.prevQuestion());
+    }
+
     if (this.modal) {
       this.modal.addEventListener('click', (e) => {
         if (e.target === this.modal) this.closeModal();
@@ -226,9 +231,25 @@ class QuizEngine {
     document.body.style.overflow = '';
   }
 
+  prevQuestion() {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+      this.renderCurrentQuestion();
+    }
+  }
+
   renderCurrentQuestion() {
     const total = this.allQuestions.length;
     const currentQ = this.allQuestions[this.currentIndex];
+
+    // Show or hide back button
+    if (this.backBtn) {
+      if (this.currentIndex > 0) {
+        this.backBtn.classList.remove('hidden');
+      } else {
+        this.backBtn.classList.add('hidden');
+      }
+    }
 
     // Progress percentage
     const progressPercent = Math.round(((this.currentIndex + 1) / (total + 2)) * 100);
@@ -243,6 +264,8 @@ class QuizEngine {
   }
 
   renderChoiceQuestion(q) {
+    const selectedVal = this.answers[q.key];
+
     this.body.innerHTML = `
       <div class="quiz-slide-enter">
         <span class="stage-pill">${q.stageTitle}</span>
@@ -250,15 +273,18 @@ class QuizEngine {
         <p class="quiz-question-desc">${q.subtitle}</p>
 
         <div class="quiz-options-container">
-          ${q.options.map((opt, idx) => `
-            <button class="quiz-option-btn" data-option-value="${opt.label}">
-              <div class="quiz-option-left">
-                <div class="quiz-option-icon-box">${opt.icon}</div>
-                <div class="quiz-option-text">${opt.label}</div>
-              </div>
-              <div class="quiz-option-arrow">→</div>
-            </button>
-          `).join('')}
+          ${q.options.map((opt, idx) => {
+            const isSelected = selectedVal === opt.label;
+            return `
+              <button class="quiz-option-btn ${isSelected ? 'selected' : ''}" data-option-value="${opt.label}">
+                <div class="quiz-option-left">
+                  <div class="quiz-option-icon-box">${opt.icon}</div>
+                  <div class="quiz-option-text">${opt.label}</div>
+                </div>
+                <div class="quiz-option-arrow">→</div>
+              </button>
+            `;
+          }).join('')}
         </div>
       </div>
     `;
@@ -268,6 +294,8 @@ class QuizEngine {
       btn.addEventListener('click', () => {
         const val = btn.getAttribute('data-option-value');
         this.answers[q.key] = val;
+        
+        buttons.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
 
         setTimeout(() => {
@@ -278,6 +306,8 @@ class QuizEngine {
   }
 
   renderDateQuestion(q) {
+    const currentDate = this.answers[q.key] || '';
+
     this.body.innerHTML = `
       <div class="quiz-slide-enter">
         <span class="stage-pill">${q.stageTitle}</span>
@@ -292,6 +322,7 @@ class QuizEngine {
             placeholder="DD/MM/AAAA" 
             maxlength="10"
             autocomplete="off"
+            value="${currentDate}"
           />
           <div style="font-size: 0.8125rem; color: var(--text-muted);">
             🔒 Usado exclusivamente para decodificação da posição astrológica arquetípica.
@@ -341,6 +372,7 @@ class QuizEngine {
   // Etapa 5: Carregamento Visual / Análise Fictícia
   // =========================================================================
   startStageFiveProcessing() {
+    if (this.backBtn) this.backBtn.classList.add('hidden');
     this.progressFill.style.width = '88%';
     this.stepIndicator.textContent = 'Etapa 5: Análise Psicométrica & Mapa Astrológico';
 
@@ -455,6 +487,7 @@ class QuizEngine {
   }
 
   renderPaywallScreen(previewUrl) {
+    if (this.backBtn) this.backBtn.classList.add('hidden');
     const isMale = this.answers.atracao_genero === 'Homens';
     const finalPreview = previewUrl || (isMale ? '/assets/images/male_sketch.jpg' : '/assets/images/hero_sketch.jpg');
 

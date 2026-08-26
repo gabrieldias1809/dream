@@ -2,6 +2,36 @@
    AuraSketch AI - Specialized Quiz & Paywall Stylesheet
    ========================================================================== */
 
+/* Quiz Back Button */
+.quiz-back-btn {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-light);
+  color: var(--text-headline);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-right: 1rem;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  box-shadow: var(--shadow-xs);
+}
+
+.quiz-back-btn:hover {
+  background: var(--bg-lavender);
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: translateX(-2px);
+}
+
+.quiz-back-btn.hidden {
+  display: none !important;
+}
+
 /* Quiz Stage Badge */
 .stage-pill {
   display: inline-flex;
