@@ -1,0 +1,22 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente sensíveis
+.env
+.env.local
+.env.*.local
+
+# Cache de sessões temporárias
+.sessions_cache.json
+
+# Vercel
+.vercel/
+
+# Logs do sistema
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Arquivos de SO
+.DS_Store
+Thumbs.db

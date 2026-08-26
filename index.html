@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraSketch AI | Esboço Artístico da Alma Gêmea Gerado por IA</title>
+  <meta name="description" content="Descubra o rosto da pessoa desenhada para a sua energia. Retrato artístico hiper-realista a grafite gerado por inteligência artificial com base em afinidade comportamental.">
+  <meta name="keywords" content="esboço alma gêmea, desenho alma gêmea ia, retrato artístico ia, inteligência artificial conexão">
+  
+  <!-- Open Graph / Meta -->
+  <meta property="og:title" content="AuraSketch AI | Esboço Artístico da Alma Gêmea">
+  <meta property="og:description" content="Descubra o rosto da pessoa desenhada para a sua energia com nossa IA avançada de psicometria estética.">
+  <meta property="og:image" content="assets/images/hero_sketch.jpg">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/quiz.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. Header / Navbar
+       ======================================================================== -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#" class="logo" id="brandLogo">
+        <div class="logo-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+        </div>
+        <span>AuraSketch</span>
+        <span class="logo-badge">IA</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#como-funciona" class="nav-link">Como Funciona</a></li>
+          <li><a href="#detalhes" class="nav-link">O que Você Recebe</a></li>
+          <li><a href="#depoimentos" class="nav-link">Depoimentos</a></li>
+          <li><a href="#faq" class="nav-link">Dúvidas</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#como-funciona" class="btn btn-secondary" style="padding: 0.65rem 1.25rem; font-size: 0.875rem;">Como Funciona</a>
+        <button class="btn btn-primary" data-open-quiz style="padding: 0.65rem 1.25rem; font-size: 0.875rem;" id="navCtaBtn">
+          <span>Fazer Quiz</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ========================================================================
+         2. Hero Section (Dobra Principal)
+         ======================================================================== -->
+    <section class="hero" id="inicio">
+      <div class="container">
+        <div class="hero-grid">
+          
+          <!-- Hero Copy & CTAs -->
+          <div class="hero-copy">
+            <div class="hero-badge-wrap">
+              <span class="hero-badge-pill">Tecnologia Exclusiva</span>
+              <span>Inteligência Artificial & Psicometria Estética</span>
+            </div>
+
+            <h1>
+              Descubra o rosto da pessoa desenhada para a <span class="gradient-text">sua energia.</span>
+            </h1>
+
+            <p class="hero-subtitle">
+              Com base em traços de personalidade, afinidade e preferências estéticas, nossa tecnologia gera um retrato artístico hiper-realista da sua alma gêmea.
+            </p>
+
+            <div class="hero-cta-group">
+              <button class="btn btn-primary btn-lg" data-open-quiz id="heroMainCtaBtn">
+                <span>Iniciar Meu Esboço Agora</span>
+                <span class="btn-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </span>
+              </button>
+
+              <div class="hero-guarantee-note">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span>Processamento sigiloso & envio digital instantâneo</span>
+              </div>
+            </div>
+
+            <!-- Prova Social Rápida -->
+            <div class="hero-social-proof">
+              <div class="avatar-stack">
+                <img src="assets/images/avatar_1.jpg" alt="Usuário Verificado">
+                <img src="assets/images/avatar_2.jpg" alt="Usuário Verificado">
+                <img src="assets/images/avatar_3.jpg" alt="Usuário Verificado">
+                <div class="avatar-stack-counter">+15k</div>
+              </div>
+
+              <div class="social-proof-info">
+                <div class="social-proof-stars">
+                  ★★★★★ <strong style="color: var(--text-headline); font-size: 0.8125rem; margin-left: 0.25rem;">4.9/5</strong>
+                </div>
+                <div class="social-proof-text">
+                  Mais de 15.000 retratos revelados <span>em todo o Brasil</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Visual: Mockup de Esboço Artístico -->
+          <div class="hero-visual">
+            
+            <!-- Floating Badge Top -->
+            <div class="floating-badge floating-badge-top">
+              <div class="badge-icon-box">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <div>
+                <div class="badge-text-title">Ultra Definição 4K</div>
+                <div class="badge-text-desc">Traçado clássico a grafite</div>
+              </div>
+            </div>
+
+            <div class="sketch-card-frame">
+              <div class="sketch-image-wrapper">
+                <img src="assets/images/hero_sketch.jpg" alt="Esboço Artístico da Alma Gêmea" class="sketch-img blurred" id="heroSketchImg">
+                <div class="sketch-blur-overlay" id="heroBlurOverlay">
+                  <button class="reveal-pill" id="toggleRevealBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <span>Clique para pré-visualizar</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="sketch-card-footer">
+                <div class="sketch-meta">
+                  <span class="sketch-meta-title">Retrato Arquetípico #8.421</span>
+                  <span class="sketch-meta-sub">Compatibilidade Comportamental • 98.7%</span>
+                </div>
+                <div class="sketch-status-badge">
+                  <span class="status-dot"></span>
+                  <span>Pronto para entrega</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Floating Badge Bottom -->
+            <div class="floating-badge floating-badge-bottom">
+              <div class="badge-icon-box" style="background-color: rgba(16, 185, 129, 0.12); color: var(--accent-emerald);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  <polyline points="9 12 11 14 15 10"></polyline>
+                </svg>
+              </div>
+              <div>
+                <div class="badge-text-title">Privacidade Blindada</div>
+                <div class="badge-text-desc">100% confidencial & anônimo</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         3. Seção "Como Funciona em 3 Passos"
+         ======================================================================== -->
+    <section class="how-it-works" id="como-funciona">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">✦ Processo Simples & Preciso</span>
+          <h2>Como Funciona em 3 Passos</h2>
+          <p>Nossa tecnologia conecta traços humanos e princípios de psicologia analítica para materializar o retrato da sua alma gêmea.</p>
+        </div>
+
+        <div class="steps-grid">
+          
+          <!-- Passo 1 -->
+          <div class="step-card">
+            <div class="step-number">01</div>
+            <div class="step-icon-wrap">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+            <h3>Responda ao Quiz</h3>
+            <p>Conte seus gostos, valores e traços de personalidade em menos de 2 minutos através de um questionário guiado e intuitivo.</p>
+            <div class="step-time-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span>Leva menos de 2 minutos</span>
+            </div>
+          </div>
+
+          <!-- Passo 2 -->
+          <div class="step-card">
+            <div class="step-number">02</div>
+            <div class="step-icon-wrap">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </div>
+            <h3>Mapeamento de Afinidade</h3>
+            <p>Cruzamos suas respostas com padrões visuais e energéticos, sintetizando expressões faciais que expressam sua compatibilidade profunda.</p>
+            <div class="step-time-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+              <span>Algoritmo neural instantâneo</span>
+            </div>
+          </div>
+
+          <!-- Passo 3 -->
+          <div class="step-card">
+            <div class="step-number">03</div>
+            <div class="step-icon-wrap">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </div>
+            <h3>Revelação do Retrato</h3>
+            <p>Receba seu esboço exclusivo em alta resolução diretamente na tela e por e-mail, acompanhado de um relatório psicológico de conexão.</p>
+            <div class="step-time-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              <span>Entrega digital imediata</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         4. Showcase & Detalhes do Produto
+         ======================================================================== -->
+    <section class="product-features" id="detalhes">
+      <div class="container">
+        
+        <!-- Row 1: Fine Art Quality -->
+        <div class="feature-row">
+          <div class="feature-content">
+            <span class="section-tag">✦ Qualidade de Belas Artes</span>
+            <h3>Traçado hiper-realista com elegância atemporal</h3>
+            <p>Cada esboço é composto digitalmente com o mesmo rigor, sombreamento e textura de um desenho feito à mão em papel de algodão por mestres do retrato clássico.</p>
+            <ul class="feature-checklist">
+              <li class="feature-check-item">
+                <div class="check-icon">✓</div>
+                <span>Textura de grafite 4B e iluminação volumétrica sofisticada.</span>
+              </li>
+              <li class="feature-check-item">
+                <div class="check-icon">✓</div>
+                <span>Resolução 4K de alta definição (pronto para quadro ou papel de parede).</span>
+              </li>
+              <li class="feature-check-item">
+                <div class="check-icon">✓</div>
+                <span>Sem marcas d'água e de propriedade 100% sua.</span>
+              </li>
+            </ul>
+            <button class="btn btn-primary" data-open-quiz>
+              <span>Gerar Meu Retrato</span>
+              <span class="btn-icon">→</span>
+            </button>
+          </div>
+          <div class="feature-visual">
+            <div class="feature-visual-frame">
+              <img src="assets/images/ethereal_sketch.jpg" alt="Exemplo de Esboço Artístico Feminino">
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Psychological Profile Included -->
+        <div class="feature-row reverse">
+          <div class="feature-content">
+            <span class="section-tag">✦ Psicometria Comportamental</span>
+            <h3>Mais que uma imagem: um guia de afinidade e conexão</h3>
+            <p>Junto ao seu esboço, você recebe uma análise descritiva rica sobre os principais traços comportamentais, linguagem de afeto e prováveis circunstâncias de encontro.</p>
+            <ul class="feature-checklist">
+              <li class="feature-check-item">
+                <div class="check-icon">✓</div>
+                <span>Mapeamento dos 3 traços dominantes de personalidade da sua alma gêmea.</span>
+              </li>
+              <li class="feature-check-item">
+                <div class="check-icon">✓</div>
+                <span>Ambientes e contextos com maior probabilidade de sintonia.</span>
+              </li>
+              <li class="feature-check-item">
+                <div class="check-icon">✓</div>
+                <span>Dicas para reconhecer e acolher a energia quando estiverem frente a frente.</span>
+              </li>
+            </ul>
+            <button class="btn btn-secondary" data-open-quiz>
+              <span>Ver Exemplo de Análise</span>
+            </button>
+          </div>
+          <div class="feature-visual">
+            <div class="feature-visual-frame">
+              <img src="assets/images/male_sketch.jpg" alt="Exemplo de Esboço Artístico Masculino">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         5. Seção de Confiança & Credibilidade (Depoimentos)
+         ======================================================================== -->
+    <section class="testimonials" id="depoimentos">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">✦ Prova Social Verificada</span>
+          <h2>Histórias de quem já descobriu seu retrato</h2>
+          <p>Veja a experiência de pessoas reais que se surpreenderam com a precisão dos traços e a riqueza dos detalhes.</p>
+        </div>
+
+        <div class="testimonials-grid">
+          
+          <!-- Testimonial 1 -->
+          <div class="testimonial-card">
+            <div>
+              <div class="testimonial-header">
+                <img src="assets/images/avatar_1.jpg" alt="Mariana S." class="testimonial-avatar">
+                <div>
+                  <div class="testimonial-author-name">Mariana Silveira</div>
+                  <div class="testimonial-verified">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    <span>Compra Verificada • São Paulo, SP</span>
+                  </div>
+                </div>
+              </div>
+              <div class="testimonial-stars">★★★★★</div>
+              <p class="testimonial-quote">
+                "Fiquei arrepiada quando abri o arquivo. O olhar sereno e o sorriso de canto do esboço tinham exatamente a mesma energia que eu sempre imaginei. Dois meses depois, conheci alguém com feições incrivelmente parecidas em um workshop."
+              </p>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-subtle);">Esboço recebido há 3 semanas</div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="testimonial-card">
+            <div>
+              <div class="testimonial-header">
+                <img src="assets/images/avatar_2.jpg" alt="Rodrigo M." class="testimonial-avatar">
+                <div>
+                  <div class="testimonial-author-name">Rodrigo Medeiros</div>
+                  <div class="testimonial-verified">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    <span>Compra Verificada • Curitiba, PR</span>
+                  </div>
+                </div>
+              </div>
+              <div class="testimonial-stars">★★★★★</div>
+              <p class="testimonial-quote">
+                "Eu era bastante cético em relação a essas coisas, mas a seriedade do questionário me chamou atenção. O desenho é uma obra de arte impecável, o traço a grafite é lindo e a descrição comportamental fez todo sentido para o que busco."
+              </p>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-subtle);">Esboço recebido há 1 mês</div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="testimonial-card">
+            <div>
+              <div class="testimonial-header">
+                <img src="assets/images/avatar_3.jpg" alt="Beatriz C." class="testimonial-avatar">
+                <div>
+                  <div class="testimonial-author-name">Beatriz Castanho</div>
+                  <div class="testimonial-verified">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    <span>Compra Verificada • Belo Horizonte, MG</span>
+                  </div>
+                </div>
+              </div>
+              <div class="testimonial-stars">★★★★★</div>
+              <p class="testimonial-quote">
+                "A entrega foi quase instantânea e a resolução é fantástica. Mandei emoldurar em uma moldura de madeira clara e ficou deslumbrante no meu quarto. Me deu uma clareza imensa sobre o tipo de pessoa com quem quero construir a vida."
+              </p>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-subtle);">Esboço recebido há 5 dias</div>
+          </div>
+
+        </div>
+
+        <!-- Barra de Confiança & Segurança -->
+        <div class="trust-bar" id="seguranca">
+          
+          <div class="trust-item">
+            <div class="trust-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <div>
+              <h4>Privacidade 100% Garantida</h4>
+              <p>Seus dados nunca são compartilhados ou comercializados.</p>
+            </div>
+          </div>
+
+          <div class="trust-item">
+            <div class="trust-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <polyline points="9 12 11 14 15 10"></polyline>
+              </svg>
+            </div>
+            <div>
+              <h4>Garantia Incondicional de 30 Dias</h4>
+              <p>Satisfação total com a arte ou reembolso integral sem perguntas.</p>
+            </div>
+          </div>
+
+          <div class="trust-item">
+            <div class="trust-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <div>
+              <h4>Entrega Digital Imediata</h4>
+              <p>Acesso ao arquivo em alta definição diretamente no seu e-mail.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         6. Seção FAQ (Perguntas Frequentes)
+         ======================================================================== -->
+    <section class="faq-section" id="faq">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">✦ Transparência Total</span>
+          <h2>Perguntas Frequentes</h2>
+          <p>Tire suas dúvidas sobre o processo de criação, entrega e segurança das suas respostas.</p>
+        </div>
+
+        <div class="faq-list">
+          
+          <div class="faq-item active">
+            <button class="faq-question">
+              <span>Como a inteligência artificial gera o retrato da alma gêmea?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              Nossa tecnologia processa suas respostas psicométricas através do pipeline FLUX.1 Schnell treinado em harmonia facial, arquétipos visuais e atração estética. A IA correlaciona suas preferências e traços com padrões de proporção facial clássica, gerando um esboço a grafite único e exclusivo.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Quanto tempo leva para receber o esboço?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              Assim que você finaliza o questionário e confirma seu acesso, a renderização com FLUX.1 Schnell leva apenas de 2 a 4 segundos. O link de download é disponibilizado na própria tela e enviado instantaneamente para o seu e-mail cadastrado.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Meus dados e respostas são mantidos em sigilo?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              Sim, rigorosamente. Utilizamos criptografia de nível bancário SSL de 256 bits. Suas respostas são utilizadas estritamente para a calibração do seu retrato artístico e nunca serão repassadas a terceiros.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Em qual formato e qualidade o arquivo é entregue?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              Você recebe um arquivo digital em altíssima resolução (PNG/JPG de 300 DPI / 4K), otimizado tanto para uso digital em celulares e computadores quanto para impressão em papel especial ou moldura física.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>E se eu não ficar satisfeito com o resultado?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              Oferecemos uma garantia incondicional de 30 dias. Caso o esboço ou o relatório não correspondam à sua expectativa, basta nos enviar um e-mail com 1 clique e devolveremos 100% do seu valor.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         7. Dobra Final / CTA de Fechamento
+         ======================================================================== -->
+    <section class="final-cta">
+      <div class="container">
+        <div class="final-cta-card">
+          <span class="section-tag" style="background: rgba(255, 255, 255, 0.12); color: #FFFFFF; border-color: rgba(255, 255, 255, 0.2);">
+            ✦ Inicie Sua Revelação Hoje
+          </span>
+          <h2>Pronto para ver quem está esperando por você?</h2>
+          <p>Descubra a feição, o olhar e a essência da pessoa alinhada com a sua frequência em menos de 2 minutos.</p>
+          
+          <div class="final-cta-btn-wrap">
+            <button class="btn btn-primary btn-lg" data-open-quiz id="finalCtaBtn">
+              <span>Começar Questionário Interativo</span>
+              <span class="btn-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </span>
+            </button>
+            <div class="final-cta-microcopy">
+              🔒 100% Confidencial • Acesso Imediato • Sem mensalidades
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       8. Footer
+       ======================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <span>AuraSketch AI</span>
+        </div>
+
+        <ul class="footer-links">
+          <li><a href="#como-funciona" class="footer-link">Como Funciona</a></li>
+          <li><a href="#depoimentos" class="footer-link">Depoimentos</a></li>
+          <li><a href="#seguranca" class="footer-link">Termos de Uso</a></li>
+          <li><a href="#seguranca" class="footer-link">Política de Privacidade</a></li>
+          <li><a href="#faq" class="footer-link">Suporte ao Cliente</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 AuraSketch AI. Todos os direitos reservados.</p>
+        <p style="max-width: 680px; margin: 0 auto; opacity: 0.75;">
+          AuraSketch AI é uma experiência de arte digital e exploração de afinidade baseada em inteligência artificial. Os esboços são gerados para inspiração, reflexão pessoal e entretenimento artístico de alta qualidade.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       9. Modal do Quiz Interativo (5 Etapas)
+       ======================================================================== -->
+  <div class="quiz-modal-backdrop" id="quizModal">
+    <div class="quiz-modal">
+      <div class="quiz-header">
+        <div class="quiz-progress-wrap">
+          <div class="quiz-progress-bar-bg">
+            <div class="quiz-progress-bar-fill" id="quizProgressFill"></div>
+          </div>
+          <div class="quiz-step-indicator" id="quizStepIndicator">Etapa 1 de 5</div>
+        </div>
+        <button class="quiz-close-btn" id="quizCloseBtn" aria-label="Fechar Quiz">×</button>
+      </div>
+      <div class="quiz-body" id="quizBody">
+        <!-- Dynamic quiz steps loaded via quiz-engine.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       10. Pop-up Intermediário de Sincronicidade (Etapa 5)
+       ======================================================================== -->
+  <div class="synchro-popup-backdrop" id="synchroPopupModal">
+    <div class="synchro-popup-card quiz-slide-enter">
+      <div class="synchro-icon">✦</div>
+      <h3 style="font-size: 1.35rem; margin-bottom: 0.6rem; color: var(--text-headline);">
+        Sincronicidade & Conexão
+      </h3>
+      <p style="font-size: 0.9375rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.5rem;">
+        Você acredita que energias e sincronicidades guiam conexões profundas?
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <button class="btn btn-primary" id="synchroBtnSim" style="width: 100%;">
+          <span>Sim, totalmente</span>
+        </button>
+        <button class="btn btn-secondary" id="synchroBtnCurioso" style="width: 100%;">
+          <span>Tenho curiosidade</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       11. Notificação Dinâmica de Prova Social (Live Toast)
+       ======================================================================== -->
+  <div class="social-proof-toast" id="socialProofToast">
+    <img src="assets/images/avatar_1.jpg" alt="Avatar" class="toast-avatar" id="toastAvatar">
+    <div>
+      <div class="toast-text" id="toastText">
+        <strong>Camila R.</strong> (São Paulo, SP) acabou de gerar seu esboço.
+      </div>
+      <div class="toast-time" id="toastTime">há 2 minutos</div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/quiz-engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

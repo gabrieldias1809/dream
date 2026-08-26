@@ -1,0 +1,22 @@
+{
+  "name": "aurasketch-ai",
+  "version": "1.0.0",
+  "description": "AuraSketch AI - Esboço Artístico da Alma Gêmea Gerado por IA com Integração SyncPay e Deploy Vercel",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js",
+    "test": "node test/test-pipeline.js"
+  },
+  "keywords": [
+    "aurasketch",
+    "ai",
+    "syncpay",
+    "pix",
+    "gemini",
+    "vercel"
+  ],
+  "author": "AuraSketch AI",
+  "license": "MIT",
+  "dependencies": {}
+}
