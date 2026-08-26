@@ -1,5 +1,5 @@
-const crypto = require('crypto');
 const sessionStore = require('../../backend/sessionStore');
+const syncpayService = require('../../backend/syncpayService');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -16,7 +16,7 @@ module.exports = async function handler(req, res) {
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
-    const { sessionId, sessionToken, respostas, userEmail, userName } = body;
+    const { sessionId, sessionToken, respostas, userEmail, userName, cpf, phone } = body;
 
     if (!sessionId && !sessionToken && !respostas) {
       return res.status(400).json({ error: 'Parâmetro sessionId é obrigatório.' });
@@ -25,7 +25,6 @@ module.exports = async function handler(req, res) {
     // Recover or retrieve session across serverless instances
     let session = await sessionStore.getSession(sessionId, sessionToken, { respostas, userEmail });
     if (!session) {
-      // Create session on the fly if answers were passed
       if (respostas) {
         session = await sessionStore.createSession(respostas, userEmail, sessionId);
       } else {
@@ -34,8 +33,6 @@ module.exports = async function handler(req, res) {
     }
 
     const price = parseFloat(process.env.PRICE_BRL || '1.00');
-    const syncpayApiKey = process.env.SYNCPAY_API_KEY;
-    const syncpayApiUrl = process.env.SYNCPAY_API_URL || 'https://api.syncpay.com.br';
     
     // Determine base callback url for webhook
     const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:4173';
@@ -43,97 +40,25 @@ module.exports = async function handler(req, res) {
     const baseUrl = process.env.APP_URL || `${protocol}://${host}`;
     const callbackUrl = `${baseUrl}/api/webhook/syncpay`;
 
+    // Request Real Pix from SyncPayments
     let transactionData = null;
-
-    // 1. Production / Live SyncPay API Call (if API Key is configured)
-    if (syncpayApiKey) {
-      try {
-        console.log(`[SyncPay Checkout] Chamando API SyncPay para a sessão ${session.sessionId}...`);
-        
-        const primaryEndpoint = syncpayApiUrl.includes('/api/partner')
-          ? `${syncpayApiUrl}/cash-in`
-          : `${syncpayApiUrl}/api/partner/v1/cash-in`;
-
-        const payload = {
-          amount: price,
-          description: 'Revelação de Esboço da Alma Gêmea - AuraSketch AI',
-          webhook_url: callbackUrl,
-          callbackUrl: callbackUrl,
-          client: {
-            name: userName || 'Cliente AuraSketch',
-            email: userEmail || session.userEmail || 'cliente@aurasketch.com'
-          },
-          customer: {
-            name: userName || 'Cliente AuraSketch',
-            email: userEmail || session.userEmail || 'cliente@aurasketch.com'
-          },
-          metadata: {
-            sessionId: session.sessionId,
-            orderId: session.orderId,
-            sessionToken: session.sessionToken
-          }
-        };
-
-        let response = await fetch(primaryEndpoint, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${syncpayApiKey}`
-          },
-          body: JSON.stringify(payload)
-        });
-
-        // Fallback to /v1/cash-in if primary returns 404
-        if (!response.ok && response.status === 404) {
-          const fallbackEndpoint = `${syncpayApiUrl.replace(/\/api\/partner\/v1|\/v1/, '')}/v1/cash-in`;
-          response = await fetch(fallbackEndpoint, {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${syncpayApiKey}`
-            },
-            body: JSON.stringify(payload)
-          });
-        }
-
-        if (response.ok) {
-          const syncData = await response.json();
-          const qrcode = syncData.qr_code_base64 || syncData.qrcode || syncData.qr_code || syncData.pix_qr_code || null;
-          const emv = syncData.pix_copy_paste || syncData.emv || syncData.pix_code || syncData.pix_copia_cola || null;
-
-          transactionData = {
-            transactionId: syncData.id || syncData.identifier || syncData.transaction_id || `sync_${Date.now()}`,
-            amount: price,
-            pixQrCode: qrcode ? (qrcode.startsWith('data:') || qrcode.startsWith('http') ? qrcode : `data:image/png;base64,${qrcode}`) : null,
-            pixCopiaCola: emv,
-            checkoutUrl: syncData.payment_url || syncData.checkout_url || null,
-            isSandbox: false
-          };
-        } else {
-          const errBody = await response.text();
-          console.warn('[SyncPay Checkout] Falha na resposta da API SyncPay:', response.status, errBody);
-        }
-      } catch (apiErr) {
-        console.warn('[SyncPay Checkout] Erro de rede ao conectar com SyncPay:', apiErr.message);
+    const syncResult = await syncpayService.createCashIn({
+      amount: price,
+      description: 'Revelação de Esboço da Alma Gêmea - AuraSketch AI',
+      webhookUrl: callbackUrl,
+      client: {
+        name: userName || (session.respostas && session.respostas.nome) || 'Cliente AuraSketch',
+        email: userEmail || session.userEmail || 'cliente@aurasketch.com',
+        cpf: cpf || (session.respostas && session.respostas.cpf),
+        phone: phone || (session.respostas && session.respostas.telefone)
       }
-    }
+    });
 
-    // 2. High-Fidelity Sandbox / Fallback Mode (Instant testing without blocking payments)
-    if (!transactionData) {
-      const mockTxId = 'sync_tx_' + crypto.randomBytes(6).toString('hex');
-      const fakeEmv = `00020126580014br.gov.bcb.pix0136${mockTxId}5204000053039865405${price.toFixed(2)}5802BR5913AuraSketch AI6009Sao Paulo62070503***6304${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
-      const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=10&data=${encodeURIComponent(fakeEmv)}`;
-
-      transactionData = {
-        transactionId: mockTxId,
-        amount: price,
-        pixQrCode: qrCodeUrl,
-        pixCopiaCola: fakeEmv,
-        checkoutUrl: null,
-        isSandbox: !syncpayApiKey
-      };
+    if (syncResult && !syncResult.error) {
+      transactionData = syncResult;
+    } else {
+      console.warn('[SyncPay Checkout] Utilizando Pix com validação CRC-16 para ambiente de teste');
+      transactionData = syncpayService.generateValidMockPix(price);
     }
 
     // Attach transaction to session store
@@ -152,6 +77,7 @@ module.exports = async function handler(req, res) {
       pixCopiaCola: transactionData.pixCopiaCola,
       checkoutUrl: transactionData.checkoutUrl,
       isSandbox: transactionData.isSandbox,
+      apiError: (syncResult && syncResult.error) ? syncResult.message : null,
       expiresInMinutes: 15
     });
 
