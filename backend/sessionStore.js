@@ -3,8 +3,8 @@
  * Manages quiz session payloads, payment verification states,
  * and delivery metadata with zero-cost protection.
  * 
- * Supports both local in-memory/filesystem caching and Vercel KV / Upstash Redis
- * via zero-dependency HTTP REST API.
+ * Supports both local in-memory/filesystem caching, Vercel /tmp caching,
+ * Vercel KV / Upstash Redis, and stateless Session Token recovery for Serverless.
  */
 
 const crypto = require('crypto');
@@ -14,7 +14,10 @@ const path = require('path');
 class SessionStore {
   constructor() {
     this.sessions = new Map();
-    this.localCachePath = path.resolve(__dirname, '../.sessions_cache.json');
+    // Cache path prioritizing writable /tmp in serverless environments
+    this.localCachePath = fs.existsSync('/tmp') 
+      ? '/tmp/.aurasketch_sessions.json' 
+      : path.resolve(__dirname, '../.sessions_cache.json');
     this.loadLocalCache();
   }
 
@@ -38,10 +41,27 @@ class SessionStore {
 
   saveLocalCache() {
     try {
-      const arr = Array.from(this.sessions.values()).slice(-200); // keep last 200 sessions
-      fs.writeFileSync(this.localCachePath, JSON.stringify(arr, null, 2), 'utf8');
+      const arr = Array.from(this.sessions.values()).slice(-200);
+      fs.writeFileSync(this.localCachePath, JSON.stringify(arr), 'utf8');
     } catch (e) {
-      // In read-only serverless environments like Vercel, ignore filesystem write errors
+      // Ignore write errors in read-only environments
+    }
+  }
+
+  encodeToken(data) {
+    try {
+      return Buffer.from(JSON.stringify(data)).toString('base64url');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  decodeToken(token) {
+    if (!token) return null;
+    try {
+      return JSON.parse(Buffer.from(token, 'base64url').toString('utf8'));
+    } catch (e) {
+      return null;
     }
   }
 
@@ -89,12 +109,12 @@ class SessionStore {
    * Creates a new pending quiz session
    * Status: PENDING_PAYMENT (No AI image is generated at this stage)
    */
-  async createSession(quizAnswers, userEmail = null) {
-    const sessionId = 'ses_' + crypto.randomBytes(8).toString('hex');
+  async createSession(quizAnswers, userEmail = null, existingSessionId = null) {
+    const sessionId = existingSessionId || ('ses_' + crypto.randomBytes(8).toString('hex'));
     const orderId = 'ord_' + crypto.randomBytes(6).toString('hex');
     
     // Determine preview thumbnail safely based on attraction
-    const isMale = quizAnswers.atracao_genero === 'Homens';
+    const isMale = quizAnswers && quizAnswers.atracao_genero === 'Homens';
     const previewUrl = isMale ? '/assets/images/male_sketch.jpg' : '/assets/images/hero_sketch.jpg';
 
     const session = {
@@ -102,7 +122,7 @@ class SessionStore {
       orderId,
       transactionId: null,
       status: 'PENDING_PAYMENT',
-      respostas: quizAnswers,
+      respostas: quizAnswers || {},
       userEmail,
       previewUrl,
       resultImageUrl: null,
@@ -112,6 +132,15 @@ class SessionStore {
       paidAt: null,
       generatedAt: null
     };
+
+    // Generate stateless recovery token
+    session.sessionToken = this.encodeToken({
+      sessionId,
+      orderId,
+      respostas: session.respostas,
+      userEmail,
+      createdAt: session.createdAt
+    });
 
     this.sessions.set(sessionId, session);
     this.saveLocalCache();
@@ -125,7 +154,7 @@ class SessionStore {
   }
 
   /**
-   * Attaches SyncPay transaction details (Pix QR, EMV, Transaction ID)
+   * Attaches SyncPay transaction details
    */
   async attachTransaction(sessionId, transactionData) {
     let session = await this.getSession(sessionId);
@@ -142,6 +171,17 @@ class SessionStore {
       updatedAt: new Date().toISOString()
     };
 
+    // Update token
+    session.sessionToken = this.encodeToken({
+      sessionId: session.sessionId,
+      orderId: session.orderId,
+      transactionId: session.transactionId,
+      respostas: session.respostas,
+      userEmail: session.userEmail,
+      paymentDetails: session.paymentDetails,
+      createdAt: session.createdAt
+    });
+
     this.sessions.set(sessionId, session);
     this.saveLocalCache();
 
@@ -153,17 +193,68 @@ class SessionStore {
     return session;
   }
 
-  async getSession(sessionId) {
-    if (!sessionId) return null;
+  /**
+   * Retrieves a session with multi-layer fallback (Memory -> Local Cache -> KV -> Token Recovery -> Fallback payload)
+   */
+  async getSession(sessionId, sessionToken = null, fallbackPayload = null) {
+    if (!sessionId && !sessionToken && !fallbackPayload) return null;
 
-    if (this.sessions.has(sessionId)) {
+    // 1. In-memory Map
+    if (sessionId && this.sessions.has(sessionId)) {
       return this.sessions.get(sessionId);
     }
 
-    const kvSession = await this.kvGet(`session:${sessionId}`);
-    if (kvSession) {
-      this.sessions.set(sessionId, kvSession);
-      return kvSession;
+    // 2. Read from disk cache
+    this.loadLocalCache();
+    if (sessionId && this.sessions.has(sessionId)) {
+      return this.sessions.get(sessionId);
+    }
+
+    // 3. Read from KV / Redis
+    if (sessionId) {
+      const kvSession = await this.kvGet(`session:${sessionId}`);
+      if (kvSession) {
+        this.sessions.set(sessionId, kvSession);
+        return kvSession;
+      }
+    }
+
+    // 4. Stateless Token Recovery (Decodes token and recreates session in memory)
+    if (sessionToken) {
+      const decoded = this.decodeToken(sessionToken);
+      if (decoded && decoded.sessionId) {
+        console.log(`[SessionStore] Session ${decoded.sessionId} recovered from stateless sessionToken.`);
+        const recoveredSession = {
+          sessionId: decoded.sessionId,
+          orderId: decoded.orderId || ('ord_' + crypto.randomBytes(6).toString('hex')),
+          transactionId: decoded.transactionId || null,
+          status: 'PENDING_PAYMENT',
+          respostas: decoded.respostas || {},
+          userEmail: decoded.userEmail || null,
+          previewUrl: (decoded.respostas && decoded.respostas.atracao_genero === 'Homens') ? '/assets/images/male_sketch.jpg' : '/assets/images/hero_sketch.jpg',
+          resultImageUrl: null,
+          analysisReport: null,
+          paymentDetails: decoded.paymentDetails || null,
+          createdAt: decoded.createdAt || new Date().toISOString(),
+          paidAt: null,
+          generatedAt: null,
+          sessionToken: sessionToken
+        };
+
+        this.sessions.set(recoveredSession.sessionId, recoveredSession);
+        this.saveLocalCache();
+        return recoveredSession;
+      }
+    }
+
+    // 5. Fallback Payload Recovery (Recreates session if respostas were sent directly in request)
+    if (fallbackPayload && fallbackPayload.respostas) {
+      console.log(`[SessionStore] Reconstituting session for ${sessionId || 'new session'} from fallback payload.`);
+      return await this.createSession(
+        fallbackPayload.respostas, 
+        fallbackPayload.userEmail || null, 
+        sessionId
+      );
     }
 
     return null;
@@ -206,8 +297,8 @@ class SessionStore {
   /**
    * Updates session when payment is confirmed and image is generated
    */
-  async markAsPaidAndGenerated(sessionId, generatedData, analysisReport) {
-    const session = await this.getSession(sessionId);
+  async markAsPaidAndGenerated(sessionId, generatedData, analysisReport, tokenOrFallback = null) {
+    let session = await this.getSession(sessionId, tokenOrFallback, tokenOrFallback);
     if (!session) return null;
 
     session.status = 'PAID_AND_GENERATED';

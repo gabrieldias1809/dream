@@ -16,20 +16,26 @@ module.exports = async function handler(req, res) {
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
-    const { sessionId, userEmail, userName } = body;
+    const { sessionId, sessionToken, respostas, userEmail, userName } = body;
 
-    if (!sessionId) {
+    if (!sessionId && !sessionToken && !respostas) {
       return res.status(400).json({ error: 'Parâmetro sessionId é obrigatório.' });
     }
 
-    const session = await sessionStore.getSession(sessionId);
+    // Recover or retrieve session across serverless instances
+    let session = await sessionStore.getSession(sessionId, sessionToken, { respostas, userEmail });
     if (!session) {
-      return res.status(404).json({ error: 'Sessão do quiz não encontrada.' });
+      // Create session on the fly if answers were passed
+      if (respostas) {
+        session = await sessionStore.createSession(respostas, userEmail, sessionId);
+      } else {
+        return res.status(404).json({ error: 'Sessão do quiz não encontrada.' });
+      }
     }
 
     const price = parseFloat(process.env.PRICE_BRL || '29.90');
     const syncpayApiKey = process.env.SYNCPAY_API_KEY;
-    const syncpayApiUrl = process.env.SYNCPAY_API_URL || 'https://api.syncpay.com.br/v1';
+    const syncpayApiUrl = process.env.SYNCPAY_API_URL || 'https://api.syncpay.com.br';
     
     // Determine base callback url for webhook
     const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:4173';
@@ -42,9 +48,8 @@ module.exports = async function handler(req, res) {
     // 1. Production / Live SyncPay API Call (if API Key is configured)
     if (syncpayApiKey) {
       try {
-        console.log(`[SyncPay Checkout] Chamando API SyncPay para a sessão ${sessionId}...`);
+        console.log(`[SyncPay Checkout] Chamando API SyncPay para a sessão ${session.sessionId}...`);
         
-        // SyncPay endpoints to try (V1 partner or V1 standard)
         const primaryEndpoint = syncpayApiUrl.includes('/api/partner')
           ? `${syncpayApiUrl}/cash-in`
           : `${syncpayApiUrl}/api/partner/v1/cash-in`;
@@ -64,7 +69,8 @@ module.exports = async function handler(req, res) {
           },
           metadata: {
             sessionId: session.sessionId,
-            orderId: session.orderId
+            orderId: session.orderId,
+            sessionToken: session.sessionToken
           }
         };
 
@@ -78,7 +84,7 @@ module.exports = async function handler(req, res) {
           body: JSON.stringify(payload)
         });
 
-        // Fallback to /v1/cash-in if partner route returns 404
+        // Fallback to /v1/cash-in if primary returns 404
         if (!response.ok && response.status === 404) {
           const fallbackEndpoint = `${syncpayApiUrl.replace(/\/api\/partner\/v1|\/v1/, '')}/v1/cash-in`;
           response = await fetch(fallbackEndpoint, {
@@ -118,8 +124,6 @@ module.exports = async function handler(req, res) {
     if (!transactionData) {
       const mockTxId = 'sync_tx_' + crypto.randomBytes(6).toString('hex');
       const fakeEmv = `00020126580014br.gov.bcb.pix0136${mockTxId}5204000053039865405${price.toFixed(2)}5802BR5913AuraSketch AI6009Sao Paulo62070503***6304${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
-      
-      // Generate clean QR code URL using public QR server or SVG
       const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=10&data=${encodeURIComponent(fakeEmv)}`;
 
       transactionData = {
@@ -133,11 +137,12 @@ module.exports = async function handler(req, res) {
     }
 
     // Attach transaction to session store
-    await sessionStore.attachTransaction(sessionId, transactionData);
+    await sessionStore.attachTransaction(session.sessionId, transactionData);
 
     return res.status(200).json({
       success: true,
       sessionId: session.sessionId,
+      sessionToken: session.sessionToken,
       orderId: session.orderId,
       amount: transactionData.amount,
       formattedPrice: `R$ ${transactionData.amount.toFixed(2).replace('.', ',')}`,

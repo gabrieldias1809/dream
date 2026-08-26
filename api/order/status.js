@@ -16,11 +16,17 @@ module.exports = async function handler(req, res) {
       (req.url && req.url.includes('?') ? new URL(req.url, 'http://localhost').searchParams.get('sessionId') : null)
     );
 
-    if (!sessionId) {
+    const sessionToken = (
+      (req.query && req.query.sessionToken) ||
+      (req.body && req.body.sessionToken) ||
+      (req.url && req.url.includes('?') ? new URL(req.url, 'http://localhost').searchParams.get('sessionToken') : null)
+    );
+
+    if (!sessionId && !sessionToken) {
       return res.status(400).json({ error: 'sessionId é obrigatório na consulta.' });
     }
 
-    const session = await sessionStore.getSession(sessionId);
+    const session = await sessionStore.getSession(sessionId, sessionToken);
 
     if (!session) {
       return res.status(404).json({ error: 'Sessão não encontrada.' });

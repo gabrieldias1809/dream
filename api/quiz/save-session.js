@@ -29,6 +29,7 @@ module.exports = async function handler(req, res) {
       success: true,
       message: 'Respostas salvas com sucesso. Aguardando confirmação de pagamento.',
       sessionId: session.sessionId,
+      sessionToken: session.sessionToken,
       orderId: session.orderId,
       status: session.status,
       previewUrl: session.previewUrl

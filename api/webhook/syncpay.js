@@ -99,9 +99,15 @@ module.exports = async function handler(req, res) {
       (body.data && body.data.id)
     );
 
+    const sessionToken = (
+      body.sessionToken ||
+      (body.metadata && body.metadata.sessionToken) ||
+      (body.data && body.data.metadata && body.data.metadata.sessionToken)
+    );
+
     let session = null;
-    if (sessionId) {
-      session = await sessionStore.getSession(sessionId);
+    if (sessionId || sessionToken) {
+      session = await sessionStore.getSession(sessionId, sessionToken, body.metadata || body);
     } else if (orderId) {
       session = await sessionStore.getSessionByOrderId(orderId);
     } else if (transactionId) {

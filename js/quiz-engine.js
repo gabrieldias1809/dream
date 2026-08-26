@@ -476,6 +476,7 @@ class QuizEngine {
       const data = await response.json();
       if (data.success) {
         this.currentSessionId = data.sessionId;
+        this.sessionToken = data.sessionToken;
         this.renderPaywallScreen(data.previewUrl);
       } else {
         this.renderPaywallScreen('/assets/images/hero_sketch.jpg');
@@ -589,6 +590,8 @@ class QuizEngine {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           sessionId: this.currentSessionId,
+          sessionToken: this.sessionToken,
+          respostas: this.answers,
           userEmail: this.answers.userEmail
         })
       });
@@ -763,7 +766,8 @@ class QuizEngine {
 
   async checkPaymentStatus(sessionId, isManual = false) {
     try {
-      const response = await fetch(`/api/order/status?sessionId=${encodeURIComponent(sessionId)}`);
+      const tokenParam = this.sessionToken ? `&sessionToken=${encodeURIComponent(this.sessionToken)}` : '';
+      const response = await fetch(`/api/order/status?sessionId=${encodeURIComponent(sessionId)}${tokenParam}`);
       if (!response.ok) return;
 
       const data = await response.json();
