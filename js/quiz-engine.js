@@ -805,7 +805,10 @@ class QuizEngine {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          sessionId: this.currentSessionId
+          sessionId: this.currentSessionId,
+          sessionToken: this.sessionToken,
+          respostas: this.answers,
+          userEmail: this.answers.userEmail
         })
       });
 

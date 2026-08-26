@@ -38,15 +38,19 @@ module.exports = async function handler(req, res) {
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
-    const { sessionId } = body;
+    const { sessionId, sessionToken, respostas, userEmail } = body;
 
-    if (!sessionId) {
+    if (!sessionId && !sessionToken && !respostas) {
       return res.status(400).json({ error: 'sessionId é obrigatório.' });
     }
 
-    const session = await sessionStore.getSession(sessionId);
+    let session = await sessionStore.getSession(sessionId, sessionToken, { respostas, userEmail });
     if (!session) {
-      return res.status(404).json({ error: 'Sessão não encontrada.' });
+      if (respostas) {
+        session = await sessionStore.createSession(respostas, userEmail, sessionId);
+      } else {
+        return res.status(404).json({ error: 'Sessão não encontrada.' });
+      }
     }
 
     console.log(`[Admin Test] Simulando pagamento para ${sessionId}...`);
