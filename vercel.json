@@ -2,6 +2,10 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/assets/images/generated/(.*)",
+      "destination": "http://aurasketch.72.60.242.91.sslip.io/assets/images/generated/$1"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "http://aurasketch.72.60.242.91.sslip.io/api/$1"
     }
