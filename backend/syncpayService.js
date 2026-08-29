@@ -118,6 +118,7 @@ class SyncPayService {
     };
 
     console.log(`[SyncPay CashIn] Enviando requisição para ${baseUrl}/api/partner/v1/cash-in...`);
+    console.log(`[SyncPay CashIn] Payload:`, JSON.stringify(payload, null, 2));
 
     try {
       const res = await fetch(`${baseUrl}/api/partner/v1/cash-in`, {
@@ -129,6 +130,12 @@ class SyncPayService {
         },
         body: JSON.stringify(payload)
       });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error(`[SyncPay CashIn] Retorno não OK da API SyncPayments: ${res.status} ${errorText}`);
+        return null;
+      }
 
       const bodyText = await res.text();
       let syncData = null;
