@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+.env
+.sessions_cache.json
+.aurasketch_sessions.json
+*.log
+.git
+.gitignore

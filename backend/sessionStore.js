@@ -1,10 +1,11 @@
 /**
  * AuraSketch AI - Session & Order Store
  * Manages quiz session payloads, payment verification states,
- * and delivery metadata with zero-cost protection.
- * 
- * Supports both local in-memory/filesystem caching, Vercel /tmp caching,
- * Vercel KV / Upstash Redis, and stateless Session Token recovery for Serverless.
+ * and delivery metadata.
+ *
+ * Persistence: In-memory Map (Node.js process) + local JSON file.
+ * When deployed on Easypanel with a Docker volume mounted at /app/data,
+ * sessions survive container restarts automatically.
  */
 
 const crypto = require('crypto');
@@ -14,10 +15,15 @@ const path = require('path');
 class SessionStore {
   constructor() {
     this.sessions = new Map();
-    // Cache path prioritizing writable /tmp in serverless environments
-    this.localCachePath = fs.existsSync('/tmp') 
-      ? '/tmp/.aurasketch_sessions.json' 
-      : path.resolve(__dirname, '../.sessions_cache.json');
+
+    // Prefer /app/data (Docker volume on Easypanel), fallback to /tmp or local dir
+    const dataDir = fs.existsSync('/app/data')
+      ? '/app/data'
+      : fs.existsSync('/tmp')
+        ? '/tmp'
+        : path.resolve(__dirname, '..');
+
+    this.localCachePath = path.join(dataDir, 'aurasketch_sessions.json');
     this.loadLocalCache();
   }
 
@@ -32,19 +38,21 @@ class SessionStore {
               this.sessions.set(item.sessionId, item);
             }
           });
+          console.log(`[SessionStore] ${this.sessions.size} sessão(ões) carregada(s) do cache local.`);
         }
       }
     } catch (e) {
-      // Non-critical cache load error
+      console.warn('[SessionStore] Aviso: não foi possível carregar cache local:', e.message);
     }
   }
 
   saveLocalCache() {
     try {
-      const arr = Array.from(this.sessions.values()).slice(-200);
-      fs.writeFileSync(this.localCachePath, JSON.stringify(arr), 'utf8');
+      // Keep only the last 500 sessions to avoid unbounded growth
+      const arr = Array.from(this.sessions.values()).slice(-500);
+      fs.writeFileSync(this.localCachePath, JSON.stringify(arr, null, 2), 'utf8');
     } catch (e) {
-      // Ignore write errors in read-only environments
+      console.warn('[SessionStore] Aviso: não foi possível salvar cache local:', e.message);
     }
   }
 
@@ -66,54 +74,14 @@ class SessionStore {
   }
 
   /**
-   * Helper to interact with Upstash Redis / Vercel KV via REST API
-   */
-  async kvSet(key, value, exSeconds = 86400) {
-    const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-    const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-
-    if (!url || !token) return;
-
-    try {
-      await fetch(`${url}/set/${encodeURIComponent(key)}/${encodeURIComponent(JSON.stringify(value))}?ex=${exSeconds}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-    } catch (err) {
-      console.warn('[SessionStore] KV Set error:', err.message);
-    }
-  }
-
-  async kvGet(key) {
-    const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-    const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-
-    if (!url || !token) return null;
-
-    try {
-      const res = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.result) {
-          return typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
-        }
-      }
-    } catch (err) {
-      console.warn('[SessionStore] KV Get error:', err.message);
-    }
-    return null;
-  }
-
-  /**
-   * Creates a new pending quiz session
-   * Status: PENDING_PAYMENT (No AI image is generated at this stage)
+   * Creates a new pending quiz session.
+   * Status: PENDING_PAYMENT
    */
   async createSession(quizAnswers, userEmail = null, existingSessionId = null) {
     const sessionId = existingSessionId || ('ses_' + crypto.randomBytes(8).toString('hex'));
     const orderId = 'ord_' + crypto.randomBytes(6).toString('hex');
-    
-    // Determine preview thumbnail safely based on attraction
+
+    // Determine preview thumbnail based on gender attraction
     const isMale = quizAnswers && quizAnswers.atracao_genero === 'Homens';
     const previewUrl = isMale ? '/assets/images/male_sketch.jpg' : '/assets/images/hero_sketch.jpg';
 
@@ -133,7 +101,7 @@ class SessionStore {
       generatedAt: null
     };
 
-    // Generate stateless recovery token
+    // Generate stateless recovery token (backup for session lookup)
     session.sessionToken = this.encodeToken({
       sessionId,
       orderId,
@@ -145,16 +113,12 @@ class SessionStore {
     this.sessions.set(sessionId, session);
     this.saveLocalCache();
 
-    // Persist to KV if configured
-    await this.kvSet(`session:${sessionId}`, session);
-    await this.kvSet(`order:${orderId}`, sessionId);
-
-    console.log(`[SessionStore] Session created: ${sessionId} (Status: PENDING_PAYMENT)`);
+    console.log(`[SessionStore] Sessão criada: ${sessionId} (Status: PENDING_PAYMENT)`);
     return session;
   }
 
   /**
-   * Attaches SyncPay transaction details
+   * Attaches SyncPay transaction details to a session.
    */
   async attachTransaction(sessionId, transactionData) {
     let session = await this.getSession(sessionId);
@@ -171,7 +135,7 @@ class SessionStore {
       updatedAt: new Date().toISOString()
     };
 
-    // Update token
+    // Update recovery token with transaction info
     session.sessionToken = this.encodeToken({
       sessionId: session.sessionId,
       orderId: session.orderId,
@@ -185,45 +149,33 @@ class SessionStore {
     this.sessions.set(sessionId, session);
     this.saveLocalCache();
 
-    await this.kvSet(`session:${sessionId}`, session);
-    if (transactionData.transactionId) {
-      await this.kvSet(`tx:${transactionData.transactionId}`, sessionId);
-    }
-
+    console.log(`[SessionStore] Transação ${transactionData.transactionId} vinculada à sessão ${sessionId}`);
     return session;
   }
 
   /**
-   * Retrieves a session with multi-layer fallback (Memory -> Local Cache -> KV -> Token Recovery -> Fallback payload)
+   * Retrieves a session with multi-layer fallback:
+   * Memory → Local File Cache → Stateless Token Recovery → Fallback payload
    */
   async getSession(sessionId, sessionToken = null, fallbackPayload = null) {
     if (!sessionId && !sessionToken && !fallbackPayload) return null;
 
-    // 1. In-memory Map
+    // 1. In-memory Map (fastest path — always hits when process is running)
     if (sessionId && this.sessions.has(sessionId)) {
       return this.sessions.get(sessionId);
     }
 
-    // 2. Read from disk cache
+    // 2. Reload from disk cache (handles edge cases after cold starts)
     this.loadLocalCache();
     if (sessionId && this.sessions.has(sessionId)) {
       return this.sessions.get(sessionId);
     }
 
-    // 3. Read from KV / Redis
-    if (sessionId) {
-      const kvSession = await this.kvGet(`session:${sessionId}`);
-      if (kvSession) {
-        this.sessions.set(sessionId, kvSession);
-        return kvSession;
-      }
-    }
-
-    // 4. Stateless Token Recovery (Decodes token and recreates session in memory)
+    // 3. Stateless Token Recovery (decodes base64 token and recreates session)
     if (sessionToken) {
       const decoded = this.decodeToken(sessionToken);
       if (decoded && decoded.sessionId) {
-        console.log(`[SessionStore] Session ${decoded.sessionId} recovered from stateless sessionToken.`);
+        console.log(`[SessionStore] Sessão ${decoded.sessionId} recuperada via sessionToken.`);
         const recoveredSession = {
           sessionId: decoded.sessionId,
           orderId: decoded.orderId || ('ord_' + crypto.randomBytes(6).toString('hex')),
@@ -231,7 +183,9 @@ class SessionStore {
           status: 'PENDING_PAYMENT',
           respostas: decoded.respostas || {},
           userEmail: decoded.userEmail || null,
-          previewUrl: (decoded.respostas && decoded.respostas.atracao_genero === 'Homens') ? '/assets/images/male_sketch.jpg' : '/assets/images/hero_sketch.jpg',
+          previewUrl: (decoded.respostas && decoded.respostas.atracao_genero === 'Homens')
+            ? '/assets/images/male_sketch.jpg'
+            : '/assets/images/hero_sketch.jpg',
           resultImageUrl: null,
           analysisReport: null,
           paymentDetails: decoded.paymentDetails || null,
@@ -247,12 +201,12 @@ class SessionStore {
       }
     }
 
-    // 5. Fallback Payload Recovery (Recreates session if respostas were sent directly in request)
+    // 4. Fallback Payload Recovery (recreates session from respostas in the request body)
     if (fallbackPayload && fallbackPayload.respostas) {
-      console.log(`[SessionStore] Reconstituting session for ${sessionId || 'new session'} from fallback payload.`);
+      console.log(`[SessionStore] Reconstituindo sessão ${sessionId || 'nova'} a partir do payload de fallback.`);
       return await this.createSession(
-        fallbackPayload.respostas, 
-        fallbackPayload.userEmail || null, 
+        fallbackPayload.respostas,
+        fallbackPayload.userEmail || null,
         sessionId
       );
     }
@@ -264,14 +218,13 @@ class SessionStore {
     if (!orderId) return null;
 
     for (const session of this.sessions.values()) {
-      if (session.orderId === orderId) {
-        return session;
-      }
+      if (session.orderId === orderId) return session;
     }
 
-    const sessionId = await this.kvGet(`order:${orderId}`);
-    if (sessionId) {
-      return await this.getSession(sessionId);
+    // Reload from disk and try again
+    this.loadLocalCache();
+    for (const session of this.sessions.values()) {
+      if (session.orderId === orderId) return session;
     }
 
     return null;
@@ -281,21 +234,30 @@ class SessionStore {
     if (!transactionId) return null;
 
     for (const session of this.sessions.values()) {
-      if (session.transactionId === transactionId || (session.paymentDetails && session.paymentDetails.transactionId === transactionId)) {
+      if (
+        session.transactionId === transactionId ||
+        (session.paymentDetails && session.paymentDetails.transactionId === transactionId)
+      ) {
         return session;
       }
     }
 
-    const sessionId = await this.kvGet(`tx:${transactionId}`);
-    if (sessionId) {
-      return await this.getSession(sessionId);
+    // Reload from disk and try again
+    this.loadLocalCache();
+    for (const session of this.sessions.values()) {
+      if (
+        session.transactionId === transactionId ||
+        (session.paymentDetails && session.paymentDetails.transactionId === transactionId)
+      ) {
+        return session;
+      }
     }
 
     return null;
   }
 
   /**
-   * Updates session when payment is confirmed and image is generated
+   * Marks a session as paid and stores the generated image URL.
    */
   async markAsPaidAndGenerated(sessionId, generatedData, analysisReport, tokenOrFallback = null) {
     let session = await this.getSession(sessionId, tokenOrFallback, tokenOrFallback);
@@ -315,9 +277,21 @@ class SessionStore {
     this.sessions.set(sessionId, session);
     this.saveLocalCache();
 
-    await this.kvSet(`session:${sessionId}`, session);
-    console.log(`[SessionStore] Session ${sessionId} marked as PAID_AND_GENERATED`);
+    console.log(`[SessionStore] Sessão ${sessionId} marcada como PAID_AND_GENERATED`);
     return session;
+  }
+
+  /**
+   * Returns a summary of all stored sessions (for admin/debug use).
+   */
+  getSummary() {
+    const all = Array.from(this.sessions.values());
+    return {
+      total: all.length,
+      pending: all.filter(s => s.status === 'PENDING_PAYMENT').length,
+      paid: all.filter(s => s.status === 'PAID_AND_GENERATED').length,
+      cachePath: this.localCachePath
+    };
   }
 }
 

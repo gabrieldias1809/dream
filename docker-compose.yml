@@ -1,0 +1,39 @@
+# ==========================================
+# AuraSketch AI — Docker Compose
+# Para deploy no Easypanel ou local
+# ==========================================
+
+services:
+  aurasketch:
+    build: .
+    container_name: aurasketch-ai
+    ports:
+      - "4173:4173"
+    volumes:
+      # Persiste sessões de pagamento mesmo após reinicialização do container
+      - sessions_data:/app/data
+    environment:
+      - PORT=4173
+      # URL pública do backend no Easypanel (necessário para webhook SyncPay)
+      - APP_URL=${APP_URL}
+      # Google Gemini — geração de imagens IA
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      # SyncPayments — gateway PIX
+      - SYNCPAY_API_URL=${SYNCPAY_API_URL:-https://api.syncpayments.com.br}
+      - SYNCPAY_CLIENT_ID=${SYNCPAY_CLIENT_ID}
+      - SYNCPAY_CLIENT_SECRET=${SYNCPAY_CLIENT_SECRET}
+      - SYNCPAY_API_KEY=${SYNCPAY_API_KEY}
+      - SYNCPAY_WEBHOOK_SECRET=${SYNCPAY_WEBHOOK_SECRET}
+      # Preço do produto em BRL
+      - PRICE_BRL=${PRICE_BRL:-1.00}
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4173/api/order/status?sessionId=healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  sessions_data:
+    driver: local
