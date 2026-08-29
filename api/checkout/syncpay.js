@@ -46,6 +46,8 @@ module.exports = async function handler(req, res) {
       amount: price,
       description: 'Revelação de Esboço da Alma Gêmea - AuraSketch AI',
       webhookUrl: callbackUrl,
+      sessionId: session.sessionId,
+      sessionToken: session.sessionToken,
       client: {
         name: userName || (session.respostas && session.respostas.nome) || 'Cliente AuraSketch',
         email: userEmail || session.userEmail || 'cliente@aurasketch.com',

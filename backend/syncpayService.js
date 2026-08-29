@@ -78,7 +78,7 @@ class SyncPayService {
     return apiKey || null;
   }
 
-  async createCashIn({ amount, description, webhookUrl, client }) {
+  async createCashIn({ amount, description, webhookUrl, client, sessionId, sessionToken }) {
     const baseUrl = this.getBaseUrl();
     const token = await this.getAccessToken();
 
@@ -97,6 +97,12 @@ class SyncPayService {
       amount: parseFloat(Number(amount).toFixed(2)),
       description: description || 'Revelação de Esboço da Alma Gêmea - AuraSketch AI',
       webhook_url: webhookUrl,
+      // custom_id allows the webhook to identify the session even after a server restart
+      custom_id: sessionId || undefined,
+      metadata: {
+        sessionId: sessionId || undefined,
+        sessionToken: sessionToken || undefined
+      },
       client: {
         name: (client && client.name) || 'Cliente AuraSketch',
         cpf: cleanCpf,
