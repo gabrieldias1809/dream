@@ -30,6 +30,11 @@ module.exports = async function handler(req, res) {
       } else {
         return res.status(404).json({ error: 'Sessão do quiz não encontrada.' });
       }
+    } else if (respostas) {
+      // Merge new respostas (e.g., CPF collected on the paywall) into the existing session
+      session.respostas = { ...session.respostas, ...respostas };
+      sessionStore.sessions.set(session.sessionId, session);
+      sessionStore.saveLocalCache();
     }
 
     const price = parseFloat(process.env.PRICE_BRL || '1.00');
@@ -52,10 +57,10 @@ module.exports = async function handler(req, res) {
       sessionId: session.sessionId,
       sessionToken: session.sessionToken,
       client: {
-        name: userName || (session.respostas && session.respostas.nome) || 'Cliente AuraSketch',
+        name: userName || session.respostas.nome || 'Cliente AuraSketch',
         email: userEmail || session.userEmail || 'cliente@aurasketch.com',
-        cpf: cpf || (session.respostas && session.respostas.cpf),
-        phone: phone || (session.respostas && session.respostas.telefone)
+        cpf: cpf || session.respostas.cpf || session.respostas.userCpf,
+        phone: phone || session.respostas.telefone || session.respostas.whatsapp
       }
     });
 
