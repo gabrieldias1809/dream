@@ -355,9 +355,9 @@
   background: #FFFFFF;
   border: 1.5px solid var(--border-light);
   border-radius: var(--radius-xl);
-  padding: 1.5rem;
+  padding: 1rem 1.25rem;
   box-shadow: var(--shadow-md);
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 .pix-price-tag {
@@ -386,8 +386,8 @@
 }
 
 .pix-qrcode-box img {
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
   display: block;
   border-radius: var(--radius-md);
 }

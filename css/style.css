@@ -1129,7 +1129,8 @@ h1, h2, h3, h4 {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
+  overflow-y: auto;
   opacity: 0;
   visibility: hidden;
   transition: all var(--transition-base);
@@ -1144,10 +1145,13 @@ h1, h2, h3, h4 {
   background-color: #FFFFFF;
   width: 100%;
   max-width: 640px;
+  max-height: 92vh;
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-xl);
   border: 1px solid var(--border-light);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   transform: scale(0.96) translateY(10px);
   transition: all var(--transition-smooth);
 }
@@ -1213,6 +1217,8 @@ h1, h2, h3, h4 {
   min-height: 380px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .quiz-question-title {
