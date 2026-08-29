@@ -87,11 +87,22 @@ class SyncPayService {
       return null;
     }
 
-    // Clean CPF and phone for SyncPayments validation
-    const rawCpf = (client && client.cpf) || '12345678900';
-    const cleanCpf = rawCpf.replace(/\D/g, '').padStart(11, '0').slice(0, 11);
-    const rawPhone = (client && client.phone) || '11999999999';
-    const cleanPhone = rawPhone.replace(/\D/g, '').padStart(10, '0').slice(0, 11);
+    // Build client object — only include CPF/phone if actually provided
+    // Sending fake defaults causes SyncPay to reject the request with 500
+    const clientObj = {
+      name: (client && client.name) || 'Cliente AuraSketch',
+      email: (client && client.email) || 'cliente@aurasketch.com'
+    };
+
+    if (client && client.cpf) {
+      const cleanCpf = client.cpf.replace(/\D/g, '').slice(0, 11);
+      if (cleanCpf.length === 11) clientObj.cpf = cleanCpf;
+    }
+
+    if (client && client.phone) {
+      const cleanPhone = client.phone.replace(/\D/g, '').slice(0, 11);
+      if (cleanPhone.length >= 10) clientObj.phone = cleanPhone;
+    }
 
     const payload = {
       amount: parseFloat(Number(amount).toFixed(2)),
@@ -103,12 +114,7 @@ class SyncPayService {
         sessionId: sessionId || undefined,
         sessionToken: sessionToken || undefined
       },
-      client: {
-        name: (client && client.name) || 'Cliente AuraSketch',
-        cpf: cleanCpf,
-        email: (client && client.email) || 'cliente@aurasketch.com',
-        phone: cleanPhone
-      }
+      client: clientObj
     };
 
     console.log(`[SyncPay CashIn] Enviando requisição para ${baseUrl}/api/partner/v1/cash-in...`);
