@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "http://72.60.242.91:4173/api/$1"
+      "destination": "http://aurasketch.72.60.242.91.sslip.io/api/$1"
     }
   ],
   "headers": [
