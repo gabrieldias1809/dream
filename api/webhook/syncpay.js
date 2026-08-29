@@ -79,12 +79,16 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ success: true, message: `Evento ignorado para status ${status}` });
     }
 
-    // 2. Identify session ID
+    // 2. Identify session ID — first from URL query params (most reliable),
+    //    then fall back to body fields for compatibility
+    const urlParams = req.query || {};
     const sessionId = (
+      urlParams.sessionId ||
       body.sessionId ||
       (body.metadata && body.metadata.sessionId) ||
       (body.data && body.data.metadata && body.data.metadata.sessionId) ||
-      (body.custom_id)
+      (body.data && body.data.custom_id) ||
+      body.custom_id
     );
 
     const orderId = (
@@ -100,6 +104,7 @@ module.exports = async function handler(req, res) {
     );
 
     const sessionToken = (
+      urlParams.sessionToken ||
       body.sessionToken ||
       (body.metadata && body.metadata.sessionToken) ||
       (body.data && body.data.metadata && body.data.metadata.sessionToken)
