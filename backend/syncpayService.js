@@ -111,8 +111,7 @@ class SyncPayService {
       // custom_id allows the webhook to identify the session even after a server restart
       custom_id: sessionId || undefined,
       metadata: {
-        sessionId: sessionId || undefined,
-        sessionToken: sessionToken || undefined
+        sessionId: sessionId || undefined
       },
       client: clientObj
     };

@@ -43,10 +43,9 @@ module.exports = async function handler(req, res) {
     const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:4173';
     const protocol = host.includes('localhost') ? 'http' : 'https';
     const baseUrl = process.env.APP_URL || `${protocol}://${host}`;
-    // Include sessionId and sessionToken in the webhook URL for guaranteed session recovery
-    // This works even after server restarts, regardless of SyncPay's webhook body format
-    const sessionQuery = `sessionId=${encodeURIComponent(session.sessionId)}&sessionToken=${encodeURIComponent(session.sessionToken || '')}`;
-    const callbackUrl = `${baseUrl}/api/webhook/syncpay?${sessionQuery}`;
+    // Send only the short sessionId in the webhook URL. 
+    // Sending the massive sessionToken caused SyncPay to crash with HTTP 500 due to length limits.
+    const callbackUrl = `${baseUrl}/api/webhook/syncpay?sessionId=${encodeURIComponent(session.sessionId)}`;
 
     // Request Real Pix from SyncPayments
     let transactionData = null;
