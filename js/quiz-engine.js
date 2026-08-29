@@ -530,6 +530,18 @@ class QuizEngine {
           />
         </div>
 
+        <div class="email-input-box" style="margin-top: 1rem;">
+          <label for="paywallUserCpf">Informe seu CPF (obrigatório para liberação do PIX):</label>
+          <input 
+            type="text" 
+            id="paywallUserCpf" 
+            class="custom-input" 
+            placeholder="000.000.000-00"
+            value="${this.answers.cpf || ''}"
+            maxlength="14"
+          />
+        </div>
+
         <div style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 0.875rem 1rem; margin-bottom: 1.25rem; text-align: left; font-size: 0.8125rem;">
           <strong style="color: var(--text-headline);">Incluso na Liberação Imediata:</strong>
           <ul style="list-style: none; margin-top: 0.35rem; display: flex; flex-direction: column; gap: 0.25rem; color: var(--text-body);">
@@ -556,6 +568,17 @@ class QuizEngine {
 
     const checkoutBtn = document.getElementById('paywallCheckoutBtn');
     const emailInput = document.getElementById('paywallUserEmail');
+    const cpfInput = document.getElementById('paywallUserCpf');
+
+    if (cpfInput) {
+      cpfInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 3) value = value.replace(/^(\d{3})(\d)/, '$1.$2');
+        if (value.length > 6) value = value.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+        if (value.length > 9) value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+        e.target.value = value.substring(0, 14);
+      });
+    }
 
     checkoutBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
@@ -565,7 +588,15 @@ class QuizEngine {
         return;
       }
 
+      const cpf = cpfInput ? cpfInput.value.replace(/\D/g, '') : '';
+      if (cpf.length !== 11) {
+        alert('Por favor, digite um CPF válido contendo 11 dígitos.');
+        if (cpfInput) cpfInput.focus();
+        return;
+      }
+
       this.answers.userEmail = email;
+      this.answers.cpf = cpf;
       await this.openSyncPayCheckout();
     });
   }
