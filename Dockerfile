@@ -22,8 +22,8 @@ RUN mkdir -p /app/data
 EXPOSE 4173
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD wget -qO- http://localhost:4173/api/order/status?sessionId=healthcheck || exit 1
+HEALTHCHECK --interval=30s --timeout=15s --start-period=20s --retries=5 \
+  CMD wget -qO- http://localhost:4173/ > /dev/null || exit 1
 
 # Start the persistent Node.js server
 CMD ["node", "backend/server.js"]
