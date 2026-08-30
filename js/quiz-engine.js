@@ -584,6 +584,13 @@ class QuizEngine {
           />
         </div>
 
+        <div class="lgpd-consent-box" style="margin-top: 1rem; margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 0.6rem;">
+          <input type="checkbox" id="lgpdConsent" style="margin-top: 0.25rem; cursor: pointer; width: 1.1rem; height: 1.1rem; flex-shrink: 0; accent-color: var(--primary);">
+          <label for="lgpdConsent" style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer; line-height: 1.4; text-align: left;">
+            Declaro que sou maior de 18 anos e aceito os <a href="/termos.html" target="_blank" style="text-decoration: underline; color: var(--primary);">Termos de Uso</a> e a <a href="/privacidade.html" target="_blank" style="text-decoration: underline; color: var(--primary);">Política de Privacidade</a> da DreamPerson, consentindo com o tratamento dos meus dados.
+          </label>
+        </div>
+
         <div style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 0.875rem 1rem; margin-bottom: 1.25rem; text-align: left; font-size: 0.8125rem;">
           <strong style="color: var(--text-headline);">Incluso na Liberação Imediata:</strong>
           <ul style="list-style: none; margin-top: 0.35rem; display: flex; flex-direction: column; gap: 0.25rem; color: var(--text-body);">
@@ -612,6 +619,7 @@ class QuizEngine {
     const nameInput = document.getElementById('paywallUserName');
     const emailInput = document.getElementById('paywallUserEmail');
     const cpfInput = document.getElementById('paywallUserCpf');
+    const lgpdConsent = document.getElementById('lgpdConsent');
 
     if (cpfInput) {
       cpfInput.addEventListener('input', (e) => {
@@ -624,6 +632,11 @@ class QuizEngine {
     }
 
     checkoutBtn.addEventListener('click', async () => {
+      if (lgpdConsent && !lgpdConsent.checked) {
+        alert('Por favor, confirme que é maior de 18 anos e aceita as Políticas e Termos para prosseguir.');
+        return;
+      }
+
       const nome = nameInput ? nameInput.value.trim() : '';
       if (!nome) {
         alert('Por favor, digite seu primeiro nome.');

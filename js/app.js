@@ -116,3 +116,22 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(showNextToast, 12000);
   }
 });
+
+/* --------------------------------------------------------------------------
+   Cookie Consent Logic (LGPD)
+   -------------------------------------------------------------------------- */
+document.addEventListener('DOMContentLoaded', () => {
+  const cookieBanner = document.getElementById('cookie-banner');
+  const acceptBtn = document.getElementById('accept-cookies');
+  
+  if (cookieBanner && acceptBtn) {
+    if (!localStorage.getItem('dreamperson_cookie_consent')) {
+      cookieBanner.style.display = 'flex';
+    }
+    
+    acceptBtn.addEventListener('click', () => {
+      localStorage.setItem('dreamperson_cookie_consent', 'true');
+      cookieBanner.style.display = 'none';
+    });
+  }
+});
