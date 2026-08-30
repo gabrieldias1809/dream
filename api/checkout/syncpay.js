@@ -51,13 +51,13 @@ module.exports = async function handler(req, res) {
     let transactionData = null;
     const syncResult = await syncpayService.createCashIn({
       amount: price,
-      description: 'Revelação de Esboço da Alma Gêmea - AuraSketch',
+      description: 'Revelação de Esboço da Alma Gêmea - DreamPerson',
       webhookUrl: callbackUrl,
       sessionId: session.sessionId,
       sessionToken: session.sessionToken,
       client: {
-        name: userName || session.respostas.nome || 'Cliente AuraSketch',
-        email: userEmail || session.userEmail || 'cliente@aurasketch.com',
+        name: userName || session.respostas.nome || 'Cliente DreamPerson',
+        email: userEmail || session.userEmail || 'cliente@dreamperson.com',
         cpf: cpf || session.respostas.cpf || session.respostas.userCpf,
         phone: phone || session.respostas.telefone || session.respostas.whatsapp
       }

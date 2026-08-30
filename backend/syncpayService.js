@@ -90,8 +90,8 @@ class SyncPayService {
     // Build client object — only include CPF/phone if actually provided
     // Sending fake defaults causes SyncPay to reject the request with 500
     const clientObj = {
-      name: (client && client.name) || 'Cliente AuraSketch',
-      email: (client && client.email) || 'cliente@aurasketch.com'
+      name: (client && client.name) || 'Cliente DreamPerson',
+      email: (client && client.email) || 'cliente@dreamperson.com'
     };
 
     if (client && client.cpf) {
@@ -106,7 +106,7 @@ class SyncPayService {
 
     const payload = {
       amount: parseFloat(Number(amount).toFixed(2)),
-      description: description || 'Revelação de Esboço da Alma Gêmea - AuraSketch',
+      description: description || 'Revelação de Esboço da Alma Gêmea - DreamPerson',
       webhook_url: webhookUrl,
       // custom_id allows the webhook to identify the session even after a server restart
       custom_id: sessionId || undefined,
@@ -179,7 +179,7 @@ class SyncPayService {
     const amtStr = Number(amount).toFixed(2);
     
     // Construct standard EMV Pix string with valid mathematical CRC16
-    const payloadWithoutCrc = `00020126580014br.gov.bcb.pix0136${id}520400005303986540${amtStr.length}${amtStr}5802BR5910AuraSketch6009Sao Paulo62070503***6304`;
+    const payloadWithoutCrc = `00020126580014br.gov.bcb.pix0136${id}520400005303986540${amtStr.length}${amtStr}5802BR5911DreamPerson6009Sao Paulo62070503***6304`;
     const crc = calculatePixCrc16(payloadWithoutCrc);
     const emv = payloadWithoutCrc + crc;
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&data=${encodeURIComponent(emv)}`;
