@@ -7,41 +7,41 @@
    1. Design Tokens & CSS Variables
    -------------------------------------------------------------------------- */
 :root {
-  /* Colors - Light & Cool Palette */
-  --bg-main: #F8FAFC;
-  --bg-surface: #FFFFFF;
-  --bg-subtle: #F1F5F9;
-  --bg-lavender: #EEF2FF;
-  --bg-lavender-light: #F5F7FF;
+  /* Colors - Dark Mystical Palette */
+  --bg-main: #0C0514;
+  --bg-surface: #130A21;
+  --bg-subtle: #1C1032;
+  --bg-lavender: #251246;
+  --bg-lavender-light: #2C1654;
 
   /* Text & Contrast */
-  --text-headline: #0F172A;     /* Deep Midnight Navy */
-  --text-body: #475569;         /* Slate Body */
-  --text-muted: #64748B;        /* Cool Gray */
-  --text-subtle: #94A3B8;       /* Blue Slate Light */
-  --text-inverse: #FFFFFF;
+  --text-headline: #F1E6FF;     /* Light Lilac */
+  --text-body: #D4BFFF;         /* Soft Lavender */
+  --text-muted: #A482D8;        /* Muted Purple */
+  --text-subtle: #805BB5;
+  --text-inverse: #000000;
 
   /* Accents & Brand Primary */
-  --primary: #4F46E5;           /* Modern Indigo */
-  --primary-hover: #4338CA;
-  --primary-light: #6366F1;
-  --accent-cerulean: #3B82F6;   /* Cerulean Blue */
-  --accent-lavender: #E0E7FF;
-  --accent-emerald: #10B981;    /* Trust / Verification */
-  --accent-amber: #F59E0B;      /* Stars */
+  --primary: #B373F2;           /* Amethyst */
+  --primary-hover: #9B58D9;
+  --primary-light: #D4BFFF;
+  --accent-cerulean: #D946EF;   /* Magenta */
+  --accent-lavender: #4C1D95;
+  --accent-emerald: #10B981;    
+  --accent-amber: #E6B95C;      /* Golden Stars */
 
   /* Borders & Dividers */
-  --border-light: #E2E8F0;
-  --border-subtle: #F1F5F9;
-  --border-focus: #C7D2FE;
+  --border-light: rgba(179, 115, 242, 0.15);
+  --border-subtle: rgba(179, 115, 242, 0.08);
+  --border-focus: rgba(179, 115, 242, 0.4);
 
-  /* Shadows (Ultra-diffuse, soft, premium) */
-  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.03);
-  --shadow-sm: 0 4px 6px -1px rgba(15, 23, 42, 0.04), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
-  --shadow-md: 0 12px 24px -4px rgba(15, 23, 42, 0.06), 0 4px 6px -2px rgba(15, 23, 42, 0.02);
-  --shadow-lg: 0 20px 35px -5px rgba(15, 23, 42, 0.07), 0 10px 10px -5px rgba(15, 23, 42, 0.03);
-  --shadow-xl: 0 30px 60px -12px rgba(15, 23, 42, 0.12);
-  --shadow-glow: 0 12px 30px -5px rgba(79, 70, 229, 0.35);
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 12px 24px -4px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 20px 35px -5px rgba(0, 0, 0, 0.7), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 30px 60px -12px rgba(0, 0, 0, 0.8);
+  --shadow-glow: 0 0 30px -5px rgba(179, 115, 242, 0.35);
 
   /* Radii */
   --radius-sm: 8px;
@@ -71,7 +71,7 @@
 }
 
 html {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 16px;
   line-height: 1.6;
   color: var(--text-body);
@@ -83,7 +83,7 @@ html {
 
 body {
   overflow-x: hidden;
-  background: radial-gradient(circle at 50% 0%, #FFFFFF 0%, var(--bg-main) 100%);
+  background: radial-gradient(circle at 50% -10%, #371060 0%, var(--bg-main) 70%, #000000 100%);
   min-height: 100vh;
 }
 
@@ -125,6 +125,7 @@ a {
 }
 
 h1, h2, h3, h4 {
+  font-family: 'Cinzel', serif;
   color: var(--text-headline);
   font-weight: 700;
   line-height: 1.2;
@@ -141,7 +142,7 @@ h1, h2, h3, h4 {
   font-size: 0.8125rem;
   font-weight: 600;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(79, 70, 229, 0.12);
+  border: 1px solid var(--border-focus);
   margin-bottom: 1rem;
 }
 
