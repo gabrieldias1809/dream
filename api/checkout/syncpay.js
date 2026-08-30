@@ -51,7 +51,7 @@ module.exports = async function handler(req, res) {
     let transactionData = null;
     const syncResult = await syncpayService.createCashIn({
       amount: price,
-      description: 'Revelação de Esboço da Alma Gêmea - AuraSketch AI',
+      description: 'Revelação de Esboço da Alma Gêmea - AuraSketch',
       webhookUrl: callbackUrl,
       sessionId: session.sessionId,
       sessionToken: session.sessionToken,

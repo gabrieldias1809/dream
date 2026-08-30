@@ -20,7 +20,7 @@ function gerarRelatorioCompatibilidade(respostas) {
       { traço: 'Complementaridade de Vida', valor: '99%' }
     ],
     circunstanciasDeEncontro: 'Ambientes de aprendizado mútuo, viagens tranquilas ou círculos de amizades autênticas em comum.',
-    seloVerificacao: 'AUTENTICADO_POR_IA_AURASKETCH_2026'
+    seloVerificacao: 'AUTENTICADO_POR_ASTROLOGIA_2026'
   };
 }
 
