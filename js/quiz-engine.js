@@ -562,7 +562,7 @@ class QuizEngine {
         </div>
 
         <div class="email-input-box" style="margin-top: 1rem;">
-          <label for="paywallUserEmail">Informe seu e-mail para receber o arquivo digital:</label>
+          <label for="paywallUserEmail">Informe seu melhor e-mail (para segurança da sua conta):</label>
           <input 
             type="email" 
             id="paywallUserEmail" 
@@ -589,7 +589,7 @@ class QuizEngine {
           <ul style="list-style: none; margin-top: 0.35rem; display: flex; flex-direction: column; gap: 0.25rem; color: var(--text-body);">
             <li>✓ Esboço Artístico em Ultra HD 4K (sem marca d'água)</li>
             <li>✓ Relatório Psicométrico Descritivo de Afinidade</li>
-            <li>✓ Envio imediato para seu e-mail com acesso vitalício</li>
+            <li>✓ Acesso imediato vitalício ao arquivo HD diretamente na tela</li>
           </ul>
         </div>
 
@@ -633,7 +633,7 @@ class QuizEngine {
 
       const email = emailInput.value.trim();
       if (!email || !email.includes('@')) {
-        alert('Por favor, digite um e-mail válido para envio do esboço.');
+        alert('Por favor, digite um e-mail válido.');
         emailInput.focus();
         return;
       }
@@ -920,7 +920,7 @@ class QuizEngine {
 
         <h3 class="quiz-question-title">Aqui está o Esboço da sua Alma Gêmea</h3>
         <p class="quiz-question-desc" style="max-width: 460px; margin: 0 auto 1rem;">
-          Seu arquivo em altíssima definição foi renderizado e uma cópia também foi enviada para <strong>${this.answers.userEmail || 'seu e-mail'}</strong>.
+          Seu arquivo em altíssima definição foi renderizado e já está liberado para você acessar.
         </p>
 
         <div class="revealed-art-frame">
