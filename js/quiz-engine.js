@@ -145,7 +145,7 @@ const quizConfig = {
           subtitle: 'Projeção arquetípica de longo prazo.',
           options: [
             { label: 'Construir família', icon: '👨‍👩‍👧' },
-            { label: 'Independência financeira', icon: '💼' },
+            { label: 'Prosperidade e sucesso mútuos', icon: '🔮' },
             { label: 'Viajar o mundo', icon: '✈️' },
             { label: 'Evolução mútua', icon: '🌱' }
           ]
