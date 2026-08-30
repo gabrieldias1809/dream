@@ -326,6 +326,10 @@ h1, h2, h3, h4 {
   gap: 1rem;
 }
 
+.nav-actions .btn-secondary {
+  display: none;
+}
+
 /* --------------------------------------------------------------------------
    6. Hero Section (First Fold)
    -------------------------------------------------------------------------- */
@@ -1427,6 +1431,9 @@ h1, h2, h3, h4 {
 }
 
 @media (min-width: 641px) {
+  .nav-actions .btn-secondary {
+    display: inline-flex;
+  }
   .hero {
     padding: 4.5rem 0 5.5rem;
   }
