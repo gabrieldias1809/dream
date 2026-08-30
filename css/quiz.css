@@ -77,6 +77,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.1rem 1.25rem;
+  min-height: 56px;
   background-color: var(--bg-main);
   border: 1.5px solid var(--border-light);
   border-radius: var(--radius-lg);
@@ -189,9 +190,11 @@
 .synchro-popup-card {
   background: #FFFFFF;
   border-radius: var(--radius-2xl);
-  padding: 2.25rem 2rem;
+  padding: 1.75rem 1.25rem;
   max-width: 480px;
   width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
   text-align: center;
   box-shadow: var(--shadow-xl);
   border: 1px solid var(--border-light);
@@ -386,10 +389,13 @@
 }
 
 .pix-qrcode-box img {
-  width: 160px;
-  height: 160px;
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+  aspect-ratio: 1 / 1;
   display: block;
   border-radius: var(--radius-md);
+  margin: 0 auto;
 }
 
 .pix-copia-cola-wrap {

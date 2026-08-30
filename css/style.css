@@ -337,9 +337,9 @@ h1, h2, h3, h4 {
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 3.5rem;
+  grid-template-columns: 1fr;
   align-items: center;
+  gap: 3rem;
 }
 
 .hero-badge-wrap {
@@ -675,9 +675,9 @@ h1, h2, h3, h4 {
 
 .steps-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  position: relative;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 3.5rem;
 }
 
 .step-card {
@@ -749,20 +749,18 @@ h1, h2, h3, h4 {
 
 .feature-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  grid-template-columns: 1fr;
   align-items: center;
-  margin-bottom: 5rem;
+  gap: 2.5rem;
+  margin-bottom: 4rem;
 }
 
 .feature-row.reverse {
-  direction: rtl;
-}
-
-.feature-row.reverse .feature-content {
+  grid-template-columns: 1fr;
   direction: ltr;
 }
 
+.feature-row.reverse .feature-content,
 .feature-row.reverse .feature-visual {
   direction: ltr;
 }
@@ -1419,77 +1417,71 @@ h1, h2, h3, h4 {
   font-size: 0.6875rem;
   color: var(--text-muted);
 }
-
 /* --------------------------------------------------------------------------
-   16. Responsive Breakpoints
+   16. Responsive Breakpoints (Mobile-First)
    -------------------------------------------------------------------------- */
-@media (max-width: 1024px) {
+
+/* Hide nav links on mobile by default */
+.nav-links {
+  display: none;
+}
+
+@media (min-width: 641px) {
+  .hero {
+    padding: 4.5rem 0 5.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+  }
+  .floating-badge {
+    display: flex;
+  }
+  .final-cta-card {
+    padding: 5rem 3rem;
+  }
+  .footer-top {
+    flex-direction: row;
+    text-align: left;
+  }
+  .social-proof-toast {
+    max-width: 380px;
+    left: 24px;
+    bottom: 24px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .nav-links {
+    display: flex;
+  }
+  
   .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 3rem;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 3.5rem;
   }
 
-  .hero-visual {
-    order: -1;
+  .steps-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
   }
 
-  .steps-grid,
   .testimonials-grid,
   .trust-bar {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
   }
 
-  .feature-row,
+  .feature-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+  
   .feature-row.reverse {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    direction: ltr;
+    direction: rtl;
   }
   
   .feature-row.reverse .feature-content,
   .feature-row.reverse .feature-visual {
     direction: ltr;
-  }
-
-  .nav-links {
-    display: none;
-  }
-}
-
-@media (max-width: 640px) {
-  .hero {
-    padding: 2.5rem 0 3.5rem;
-  }
-
-  .hero h1 {
-    font-size: 2.15rem;
-  }
-
-  .floating-badge {
-    display: none;
-  }
-
-  .final-cta-card {
-    padding: 3rem 1.5rem;
-  }
-
-  .social-proof-toast {
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
-    max-width: none;
-  }
-
-  .footer-top {
-    flex-direction: column;
-    gap: 1.5rem;
-    text-align: center;
-  }
-
-  .footer-links {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
   }
 }
