@@ -147,6 +147,16 @@ module.exports = async function handler(req, res) {
     // 6. Generate Psychological Compatibility Report
     const analysisReport = gerarRelatorioCompatibilidade(session.respostas || {});
 
+    // 6.5 Generate Astrological Summary if name and birth date exist
+    const nome = session.respostas && session.respostas.nome;
+    const dataNasc = session.respostas && session.respostas.data_nascimento;
+    if (nome && dataNasc) {
+      const astrologyText = await aiService.generateAstrologicalSummary(nome, dataNasc);
+      if (astrologyText) {
+        analysisReport.astrologySummary = astrologyText;
+      }
+    }
+
     // 7. Update session to PAID_AND_GENERATED
     const updatedSession = await sessionStore.markAsPaidAndGenerated(session.sessionId, aiResult, analysisReport);
 

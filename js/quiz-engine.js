@@ -324,7 +324,8 @@ class QuizEngine {
             autocomplete="off"
             value="${currentDate}"
           />
-          <div style="font-size: 0.8125rem; color: var(--text-muted);">
+          <div id="zodiacSignDisplay" style="margin-top: 0.75rem; text-align: center; font-size: 1.25rem; font-weight: 600; color: var(--primary); min-height: 28px; transition: all 0.3s ease; transform: scale(0.9); opacity: 0;"></div>
+          <div style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.75rem;">
             🔒 Usado exclusivamente para decodificação da posição astrológica arquetípica.
           </div>
           <button class="btn btn-primary btn-lg" id="submitDateBtn" style="margin-top: 0.5rem; width: 100%;">
@@ -344,6 +345,36 @@ class QuizEngine {
       if (v.length > 2) v = v.substring(0, 2) + '/' + v.substring(2);
       if (v.length > 5) v = v.substring(0, 5) + '/' + v.substring(5, 9);
       e.target.value = v;
+
+      const zodiacDisplay = document.getElementById('zodiacSignDisplay');
+      if (v.length === 10) {
+        const parts = v.split('/');
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10);
+        
+        let sign = '';
+        if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) sign = '♒ Aquário';
+        else if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) sign = '♓ Peixes';
+        else if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) sign = '♈ Áries';
+        else if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) sign = '♉ Touro';
+        else if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) sign = '♊ Gêmeos';
+        else if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) sign = '♋ Câncer';
+        else if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) sign = '♌ Leão';
+        else if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) sign = '♍ Virgem';
+        else if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) sign = '♎ Libra';
+        else if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) sign = '♏ Escorpião';
+        else if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) sign = '♐ Sagitário';
+        else if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) sign = '♑ Capricórnio';
+        
+        if (sign) {
+          zodiacDisplay.textContent = sign;
+          zodiacDisplay.style.opacity = '1';
+          zodiacDisplay.style.transform = 'scale(1)';
+        }
+      } else {
+        zodiacDisplay.style.opacity = '0';
+        zodiacDisplay.style.transform = 'scale(0.9)';
+      }
     });
 
     submitBtn.addEventListener('click', () => {
@@ -520,6 +551,17 @@ class QuizEngine {
         </div>
 
         <div class="email-input-box">
+          <label for="paywallUserName">Qual o seu primeiro nome?</label>
+          <input 
+            type="text" 
+            id="paywallUserName" 
+            class="custom-input" 
+            placeholder="Seu nome"
+            value="${this.answers.nome || ''}"
+          />
+        </div>
+
+        <div class="email-input-box" style="margin-top: 1rem;">
           <label for="paywallUserEmail">Informe seu e-mail para receber o arquivo digital:</label>
           <input 
             type="email" 
@@ -567,6 +609,7 @@ class QuizEngine {
     `;
 
     const checkoutBtn = document.getElementById('paywallCheckoutBtn');
+    const nameInput = document.getElementById('paywallUserName');
     const emailInput = document.getElementById('paywallUserEmail');
     const cpfInput = document.getElementById('paywallUserCpf');
 
@@ -581,6 +624,13 @@ class QuizEngine {
     }
 
     checkoutBtn.addEventListener('click', async () => {
+      const nome = nameInput ? nameInput.value.trim() : '';
+      if (!nome) {
+        alert('Por favor, digite seu primeiro nome.');
+        if (nameInput) nameInput.focus();
+        return;
+      }
+
       const email = emailInput.value.trim();
       if (!email || !email.includes('@')) {
         alert('Por favor, digite um e-mail válido para envio do esboço.');
@@ -595,6 +645,7 @@ class QuizEngine {
         return;
       }
 
+      this.answers.nome = nome;
       this.answers.userEmail = email;
       this.answers.cpf = cpf;
       await this.openSyncPayCheckout();
@@ -888,6 +939,17 @@ class QuizEngine {
             <div style="font-size: 0.75rem; color: var(--text-muted);">
               <strong>Onde se encontrarão:</strong> ${order.analysisReport.circunstanciasDeEncontro}
             </div>
+            ${order.analysisReport.astrologySummary ? `
+              <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border-light);">
+                <strong style="color: var(--primary); display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.5rem;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                  Leitura Astrológica da Alma Gêmea
+                </strong>
+                <p style="font-size: 0.8125rem; color: var(--text-body); line-height: 1.5; font-style: italic;">
+                  "${order.analysisReport.astrologySummary}"
+                </p>
+              </div>
+            ` : ''}
           </div>
         ` : ''}
 

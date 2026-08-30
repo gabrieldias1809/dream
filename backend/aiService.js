@@ -164,6 +164,43 @@ class AIService {
       latencyMs: Math.max(latencyMs, 1400)
     };
   }
+
+  /**
+   * Generates a mystical astrological summary based on user's name and birth date
+   */
+  async generateAstrologicalSummary(nome, dataNascimento) {
+    const apiKey = this.getGeminiKey();
+    if (!apiKey || !nome || !dataNascimento) return '';
+    
+    try {
+      console.log(`[AI Service - Gemini] Gerando texto astrológico para ${nome} (${dataNascimento})...`);
+      const model = 'gemini-1.5-flash-latest';
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      
+      const prompt = `Atue como um místico especialista em astrologia e conexões de almas. A pessoa se chama ${nome} e nasceu em ${dataNascimento}. Baseado na astrologia da data de nascimento, escreva um único parágrafo fluido (3 a 4 linhas) descrevendo qual tipo de pessoa e qual frequência de energia ${nome} deve buscar para encontrar a verdadeira afinidade espiritual. Chame a pessoa de ${nome}, cite termos da astrologia com muita propriedade, não pule linhas. Vá direto ao ponto, não diga "olá".`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+          return data.candidates[0].content.parts[0].text.trim();
+        }
+      } else {
+        console.warn(`[AI Service - Gemini] API Error for Astrology:`, response.status);
+      }
+    } catch (err) {
+      console.warn(`[AI Service - Gemini] Falha ao gerar resumo astrológico:`, err.message);
+    }
+    
+    return '';
+  }
 }
 
 module.exports = new AIService();
