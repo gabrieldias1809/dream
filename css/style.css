@@ -834,8 +834,8 @@ h1, h2, h3, h4 {
 
 .testimonials-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
   margin-bottom: 3.5rem;
 }
 
@@ -907,10 +907,10 @@ h1, h2, h3, h4 {
   background-color: var(--bg-lavender-light);
   border: 1px solid rgba(79, 70, 229, 0.15);
   border-radius: var(--radius-2xl);
-  padding: 2.25rem 2.5rem;
+  padding: 1.5rem 1.25rem;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
   align-items: center;
 }
 
@@ -1480,6 +1480,10 @@ h1, h2, h3, h4 {
   .trust-bar {
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
+  }
+
+  .trust-bar {
+    padding: 2.25rem 2.5rem;
   }
 
   .feature-row {
