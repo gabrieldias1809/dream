@@ -955,7 +955,7 @@ class QuizEngine {
             ${order.analysisReport.astrologySummary ? `
               <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border-light);">
                 <strong style="color: var(--primary); display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.5rem;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                   Leitura Astrológica da Alma Gêmea
                 </strong>
                 <p style="font-size: 0.8125rem; color: var(--text-body); line-height: 1.5; font-style: italic;">
