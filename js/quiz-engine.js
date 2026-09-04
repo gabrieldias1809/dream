@@ -594,7 +594,7 @@ class QuizEngine {
         <div style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 0.875rem 1rem; margin-bottom: 1.25rem; text-align: left; font-size: 0.8125rem;">
           <strong style="color: var(--text-headline);">Incluso na Liberação Imediata:</strong>
           <ul style="list-style: none; margin-top: 0.35rem; display: flex; flex-direction: column; gap: 0.25rem; color: var(--text-body);">
-            <li>✓ Esboço Artístico em Ultra HD 4K (sem marca d'água)</li>
+            <li>✓ Esboço Artístico Guiado pelos Astros (sem marca d'água)</li>
             <li>✓ Relatório Psicométrico Descritivo de Afinidade</li>
             <li>✓ Acesso imediato vitalício ao arquivo HD diretamente na tela</li>
           </ul>
@@ -892,7 +892,7 @@ class QuizEngine {
         <div class="scanner-ring"></div>
         <h3 class="quiz-question-title">Pagamento Detectado com Sucesso!</h3>
         <p class="quiz-question-desc">
-          Renderizando retrato em ultra-definição e elaborando análise psicológica...
+          Alinhando retrato astrológico e elaborando análise de afinidade...
         </p>
       </div>
     `;
@@ -967,7 +967,7 @@ class QuizEngine {
         ` : ''}
 
         <a href="${order.resultImageUrl}" download="esboco_alma_gemea.jpg" class="btn btn-primary btn-lg" style="width: 100%;">
-          <span>Baixar Arquivo em Ultra HD (4K)</span>
+          <span>Baixar Retrato Astrológico</span>
           <span class="btn-icon">↓</span>
         </a>
       </div>
