@@ -218,6 +218,7 @@ class QuizEngine {
   }
 
   startQuiz() {
+    if (typeof gtag === 'function') gtag('event', 'quiz_started');
     this.currentIndex = 0;
     this.answers = {};
     this.currentSessionId = null;
@@ -390,6 +391,7 @@ class QuizEngine {
   }
 
   nextQuestion() {
+    if (typeof gtag === 'function') gtag('event', 'quiz_step_completed', { step: this.currentIndex });
     this.currentIndex++;
     if (this.currentIndex < this.allQuestions.length) {
       this.renderCurrentQuestion();
@@ -519,6 +521,7 @@ class QuizEngine {
   }
 
   renderPaywallScreen(previewUrl) {
+    if (typeof gtag === 'function') gtag('event', 'paywall_reached');
     if (this.backBtn) this.backBtn.classList.add('hidden');
     const isMale = this.answers.atracao_genero === 'Homens';
     const finalPreview = previewUrl || (isMale ? '/assets/images/male_sketch.jpg' : '/assets/images/hero_sketch.jpg');
@@ -657,6 +660,8 @@ class QuizEngine {
         if (cpfInput) cpfInput.focus();
         return;
       }
+
+      if (typeof gtag === 'function') gtag('event', 'checkout_initiated');
 
       this.answers.nome = nome;
       this.answers.userEmail = email;
