@@ -37,7 +37,7 @@ module.exports = async function handler(req, res) {
       sessionStore.saveLocalCache();
     }
 
-    const price = parseFloat(process.env.PRICE_BRL || '1.00');
+    const price = parseFloat(process.env.PRICE_BRL || '9.97');
     
     // Determine base callback url for webhook
     const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:4173';

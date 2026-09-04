@@ -740,7 +740,7 @@ class QuizEngine {
         <div class="pix-card-container">
           <div class="pix-price-tag">
             <span style="font-size: 0.9375rem; color: var(--text-muted); font-weight: 600;">Valor Promocional:</span>
-            <span class="pix-price-val">${checkoutData.formattedPrice || 'R$ 1,00'}</span>
+            <span class="pix-price-val">${checkoutData.formattedPrice || 'R$ 9,97'}</span>
           </div>
 
           <div class="pix-qrcode-box">
@@ -765,7 +765,7 @@ class QuizEngine {
             <ul class="pix-steps-list">
               <li><span class="num">1.</span> Abra o aplicativo do seu banco ou carteira digital</li>
               <li><span class="num">2.</span> Escolha <strong>Pagar via Pix</strong> > Copia e Cola ou QR Code</li>
-              <li><span class="num">3.</span> Confirme o pagamento de ${checkoutData.formattedPrice || 'R$ 1,00'}</li>
+              <li><span class="num">3.</span> Confirme o pagamento de ${checkoutData.formattedPrice || 'R$ 9,97'}</li>
             </ul>
           </div>
 
