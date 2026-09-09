@@ -956,6 +956,30 @@ class QuizEngine {
     this.stopPaymentPolling();
     this.stepIndicator.textContent = '🎉 Retrato Revelado com Sucesso!';
 
+    // Evento de Conversão / Compra Final (GA4 & Meta Pixel)
+    if (typeof gtag === 'function') {
+      gtag('event', 'purchase', {
+        transaction_id: order.transactionId || order.orderId || ('tx_' + Date.now()),
+        value: 9.97,
+        currency: 'BRL',
+        items: [{
+          item_id: 'soulmate_sketch_hd',
+          item_name: 'Esboço Astrológico da Alma Gêmea HD',
+          price: 9.97,
+          quantity: 1
+        }]
+      });
+    }
+
+    if (typeof fbq === 'function') {
+      fbq('track', 'Purchase', {
+        value: 9.97,
+        currency: 'BRL',
+        content_name: 'Esboço Astrológico da Alma Gêmea HD',
+        content_type: 'product'
+      });
+    }
+
     this.body.innerHTML = `
       <div class="order-success-card quiz-slide-enter">
         <div class="section-tag" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.2);">

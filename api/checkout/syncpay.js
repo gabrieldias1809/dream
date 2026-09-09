@@ -37,9 +37,16 @@ module.exports = async function handler(req, res) {
       sessionStore.saveLocalCache();
     }
 
-    const price = parseFloat(process.env.PRICE_BRL || '9.97');
-    
-    // Determine base callback url for webhook
+    // Valor padrão oficial do produto: R$ 9,97
+    const envPrice = process.env.PRICE_BRL || process.env.PRICE;
+    let price = 9.97;
+    if (envPrice) {
+      const parsed = parseFloat(String(envPrice).replace(',', '.'));
+      // Se a variável de ambiente for válida e diferente do valor antigo de teste (1.00), utiliza o valor configurado
+      if (!isNaN(parsed) && parsed > 1.0) {
+        price = parsed;
+      }
+    }
     const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:4173';
     const protocol = host.includes('localhost') ? 'http' : 'https';
     const baseUrl = process.env.APP_URL || `${protocol}://${host}`;

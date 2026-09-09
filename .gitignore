@@ -8,6 +8,7 @@ node_modules/
 
 # Cache de sessões temporárias
 .sessions_cache.json
+aurasketch_sessions.json
 
 # Vercel
 .vercel/
