@@ -594,9 +594,18 @@ class QuizEngine {
           </label>
         </div>
 
-        <div style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 0.875rem 1rem; margin-bottom: 1.25rem; text-align: left; font-size: 0.8125rem;">
-          <strong style="color: var(--text-headline);">Incluso na Liberação Imediata:</strong>
-          <ul style="list-style: none; margin-top: 0.35rem; display: flex; flex-direction: column; gap: 0.25rem; color: var(--text-body);">
+        <div style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 0.875rem 1rem; margin-bottom: 1.25rem; text-align: center; font-size: 0.8125rem;">
+          <strong style="color: #e11d48; font-size: 1.05rem; display: block; margin-bottom: 0.5rem;">⚠️ Atenção: Esta é sua única chance de conhecer sua alma gêmea!</strong>
+          <div style="margin-bottom: 0.75rem; display: flex; flex-direction: column; align-items: center;">
+            <span style="text-decoration: line-through; color: var(--text-muted); font-size: 0.9rem;">De: R$ 97,00</span>
+            <span style="color: var(--primary); font-size: 1.6rem; font-weight: 800; line-height: 1.2;">Por apenas R$ 9,97</span>
+          </div>
+          <div style="font-size: 0.85rem; color: #e11d48; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 0.5rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            Oferta expira em: <span id="paywallOfferTimer">10:00</span>
+          </div>
+          <strong style="color: var(--text-headline); display: block; text-align: left; margin-top: 1rem;">Incluso na Liberação Imediata:</strong>
+          <ul style="list-style: none; margin-top: 0.35rem; display: flex; flex-direction: column; gap: 0.25rem; color: var(--text-body); text-align: left;">
             <li>✓ Esboço Artístico Guiado pelos Astros (sem marca d'água)</li>
             <li>✓ Relatório Psicométrico Descritivo de Afinidade</li>
             <li>✓ Acesso imediato vitalício ao arquivo HD diretamente na tela</li>
@@ -623,6 +632,23 @@ class QuizEngine {
     const emailInput = document.getElementById('paywallUserEmail');
     const cpfInput = document.getElementById('paywallUserCpf');
     const lgpdConsent = document.getElementById('lgpdConsent');
+
+    // Start 10-minute timer for paywall urgency
+    const offerTimer = document.getElementById('paywallOfferTimer');
+    if (offerTimer) {
+      let timeLeft = 600; // 10 minutes
+      const timerInterval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          offerTimer.textContent = '00:00';
+          return;
+        }
+        const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+        const s = (timeLeft % 60).toString().padStart(2, '0');
+        offerTimer.textContent = `${m}:${s}`;
+      }, 1000);
+    }
 
     if (cpfInput) {
       cpfInput.addEventListener('input', (e) => {
@@ -983,4 +1009,8 @@ class QuizEngine {
 // Instantiate on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   window.quizEngineInstance = new QuizEngine();
+  // Auto-start quiz on page load to improve funnel conversion
+  setTimeout(() => {
+    window.quizEngineInstance.startQuiz();
+  }, 300);
 });
