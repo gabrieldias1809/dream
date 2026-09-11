@@ -25,7 +25,7 @@ services:
       - SYNCPAY_API_KEY=${SYNCPAY_API_KEY}
       - SYNCPAY_WEBHOOK_SECRET=${SYNCPAY_WEBHOOK_SECRET}
       # Preço do produto em BRL
-      - PRICE_BRL=${PRICE_BRL:-9.97}
+      - PRICE_BRL=${PRICE_BRL:-5.97}
     restart: always
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4173/api/order/status?sessionId=healthcheck"]

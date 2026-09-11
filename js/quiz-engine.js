@@ -598,7 +598,7 @@ class QuizEngine {
           <strong style="color: #e11d48; font-size: 1.05rem; display: block; margin-bottom: 0.5rem;">⚠️ Atenção: Esta é sua única chance de conhecer sua alma gêmea!</strong>
           <div style="margin-bottom: 0.75rem; display: flex; flex-direction: column; align-items: center;">
             <span style="text-decoration: line-through; color: var(--text-muted); font-size: 0.9rem;">De: R$ 97,00</span>
-            <span style="color: var(--primary); font-size: 1.6rem; font-weight: 800; line-height: 1.2;">Por apenas R$ 9,97</span>
+            <span style="color: var(--primary); font-size: 1.6rem; font-weight: 800; line-height: 1.2;">Por apenas R$ 5,97</span>
           </div>
           <div style="font-size: 0.85rem; color: #e11d48; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 0.5rem;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
@@ -771,7 +771,7 @@ class QuizEngine {
         <div class="pix-card-container">
           <div class="pix-price-tag">
             <span style="font-size: 0.9375rem; color: var(--text-muted); font-weight: 600;">Valor Promocional:</span>
-            <span class="pix-price-val">${checkoutData.formattedPrice || 'R$ 9,97'}</span>
+            <span class="pix-price-val">${checkoutData.formattedPrice || 'R$ 5,97'}</span>
           </div>
 
           <div class="pix-qrcode-box">
@@ -796,7 +796,7 @@ class QuizEngine {
             <ul class="pix-steps-list">
               <li><span class="num">1.</span> Abra o aplicativo do seu banco ou carteira digital</li>
               <li><span class="num">2.</span> Escolha <strong>Pagar via Pix</strong> > Copia e Cola ou QR Code</li>
-              <li><span class="num">3.</span> Confirme o pagamento de ${checkoutData.formattedPrice || 'R$ 9,97'}</li>
+              <li><span class="num">3.</span> Confirme o pagamento de ${checkoutData.formattedPrice || 'R$ 5,97'}</li>
             </ul>
           </div>
 
@@ -960,12 +960,12 @@ class QuizEngine {
     if (typeof gtag === 'function') {
       gtag('event', 'purchase', {
         transaction_id: order.transactionId || order.orderId || ('tx_' + Date.now()),
-        value: 9.97,
+        value: 5.97,
         currency: 'BRL',
         items: [{
           item_id: 'soulmate_sketch_hd',
           item_name: 'Esboço Astrológico da Alma Gêmea HD',
-          price: 9.97,
+          price: 5.97,
           quantity: 1
         }]
       });
@@ -973,7 +973,7 @@ class QuizEngine {
 
     if (typeof fbq === 'function') {
       fbq('track', 'Purchase', {
-        value: 9.97,
+        value: 5.97,
         currency: 'BRL',
         content_name: 'Esboço Astrológico da Alma Gêmea HD',
         content_type: 'product'
