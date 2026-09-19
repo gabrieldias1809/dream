@@ -1059,8 +1059,4 @@ class QuizEngine {
 // Instantiate on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   window.quizEngineInstance = new QuizEngine();
-  // Auto-start quiz on page load to improve funnel conversion
-  setTimeout(() => {
-    window.quizEngineInstance.startQuiz();
-  }, 300);
 });

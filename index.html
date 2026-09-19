@@ -62,156 +62,150 @@
 </head>
 <body>
 
-  <!-- ========================================================================
-       1. Header / Navbar
-       ======================================================================== -->
-  <header class="navbar" id="navbar">
-    <div class="container nav-container">
-      <a href="#" class="logo" id="brandLogo">
-        <div class="logo-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-        </div>
-        <span>DreamPerson</span>
-      </a>
-
-      <nav>
-        <ul class="nav-links">
-          <li><a href="#como-funciona" class="nav-link">Como Funciona</a></li>
-          <li><a href="#detalhes" class="nav-link">O que Você Recebe</a></li>
-          <li><a href="#depoimentos" class="nav-link">Depoimentos</a></li>
-          <li><a href="#faq" class="nav-link">Dúvidas</a></li>
-        </ul>
-      </nav>
-
-      <div class="nav-actions">
-        <a href="#como-funciona" class="btn btn-secondary" style="padding: 0.65rem 1.25rem; font-size: 0.875rem;">Como Funciona</a>
-        <button class="btn btn-primary" data-open-quiz style="padding: 0.65rem 1.25rem; font-size: 0.875rem;" id="navCtaBtn">
-          <span>Fazer Quiz</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
   <main>
     <!-- ========================================================================
-         2. Hero Section (Dobra Principal)
+         1. Hero Section (Design Direto & Minimalista de Alta Conversão)
          ======================================================================== -->
-    <section class="hero" id="inicio">
-      <div class="container">
-        <div class="hero-grid">
-          
-          <!-- Hero Copy & CTAs -->
-          <div class="hero-copy">
-            <div class="hero-badge-wrap">
-              <div class="hero-badge-pill">NOVO</div>
-            <span>Leitura Astrológica & Psicometria Estética</span>
+    <section class="direct-hero" id="inicio">
+      <div class="direct-hero-container">
+        
+        <!-- Header / Logo Centrado -->
+        <div class="direct-hero-header">
+          <a href="#" class="logo" id="brandLogo">
+            <div class="logo-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
             </div>
+            <span>DreamPerson</span>
+          </a>
+        </div>
 
-            <h1>
-              Descubra o rosto da pessoa desenhada para a <span class="gradient-text">sua energia.</span>
-            </h1>
-
-            <p class="hero-subtitle">
-              Com base em traços de personalidade, afinidade e preferências estéticas, nossa tecnologia gera um retrato artístico hiper-realista da sua alma gêmea.
-            </p>
-
-            <div class="hero-cta-group">
-              <button class="btn btn-primary btn-lg" data-open-quiz id="heroMainCtaBtn">
-                <span>Iniciar Meu Esboço Agora</span>
-                <span class="btn-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </span>
-              </button>
-
-              <div class="hero-guarantee-note">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                </svg>
-                <span>Processamento sigiloso & envio digital instantâneo</span>
-              </div>
-            </div>
-
-            <!-- Prova Social Rápida -->
-            <div class="hero-social-proof">
-              <div class="avatar-stack">
-                <img src="/assets/images/avatar_1.jpg" alt="Usuário Verificado">
-                <img src="/assets/images/avatar_2.jpg" alt="Usuário Verificado">
-                <img src="/assets/images/avatar_3.jpg" alt="Usuário Verificado">
-                <div class="avatar-stack-counter">+15k</div>
-              </div>
-
-              <div class="social-proof-info">
-                <div class="social-proof-stars">
-                  ★★★★★ <strong style="color: var(--text-headline); font-size: 0.8125rem; margin-left: 0.25rem;">4.9/5</strong>
-                </div>
-                <div class="social-proof-text">
-                  Mais de 15.000 retratos revelados <span>em todo o Brasil</span>
-                </div>
-              </div>
-            </div>
+        <!-- Proof Pills Top -->
+        <div class="hero-proof-pills">
+          <div class="hero-pill">
+            <span class="pill-bold">3M+</span> esboços criados
           </div>
-
-          <!-- Hero Visual: Mockup de Esboço Artístico -->
-          <div class="hero-visual">
-            
-            <!-- Floating Badge Top -->
-            <div class="floating-badge floating-badge-top">
-              <div class="badge-icon-box" style="font-size: 1.1rem; line-height: 1;">
-                ✨
-              </div>
-              <div>
-                <div class="badge-text-title">Conexão Astral</div>
-                <div class="badge-text-desc" style="letter-spacing: 0.15rem; font-size: 0.85rem; margin-top: 0.1rem; color: var(--text-headline);">♈ ♉ ♊ ♋ ♌ ♍</div>
-              </div>
-            </div>
-
-            <div class="sketch-card-frame">
-              <div class="sketch-image-wrapper">
-                <img src="/assets/images/hero_sketch.jpg" alt="Esboço Artístico da Alma Gêmea" class="sketch-img blurred" id="heroSketchImg">
-                <div class="sketch-blur-overlay" id="heroBlurOverlay">
-                  <button class="reveal-pill" id="toggleRevealBtn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    <span>Clique para pré-visualizar</span>
-                  </button>
-                </div>
-              </div>
-
-              <div class="sketch-card-footer">
-                <div class="sketch-meta">
-                  <span class="sketch-meta-title">Retrato Arquetípico #8.421</span>
-                  <span class="sketch-meta-sub">Compatibilidade Comportamental • 98.7%</span>
-                </div>
-                <div class="sketch-status-badge">
-                  <span class="status-dot"></span>
-                  <span>Pronto para entrega</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Floating Badge Bottom -->
-            <div class="floating-badge floating-badge-bottom">
-              <div class="badge-icon-box" style="background-color: rgba(16, 185, 129, 0.12); color: var(--accent-emerald);">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                  <polyline points="9 12 11 14 15 10"></polyline>
-                </svg>
-              </div>
-              <div>
-                <div class="badge-text-title">Privacidade Blindada</div>
-                <div class="badge-text-desc">100% confidencial & anônimo</div>
-              </div>
-            </div>
-
+          <div class="hero-pill">
+            <span class="pill-bold">18K+</span> avaliações 5 estrelas
           </div>
         </div>
+
+        <!-- Headline -->
+        <h1 class="hero-direct-title">
+          <span class="gradient-text">Veja o rosto</span> da sua alma gêmea
+        </h1>
+
+        <!-- Orbital Frame (Sketch + 8 Orbiting Icon Badges) -->
+        <div class="orbit-wrapper">
+          
+          <!-- Central Card with Blurred Silhouette & Glowing ? -->
+          <div class="orbit-center-card" data-open-quiz style="cursor: pointer;" title="Clique para descobrir sua alma gêmea">
+            <img src="/assets/images/hero_sketch.jpg" alt="Silhueta Astrológica da Alma Gêmea" class="orbit-card-img" />
+            <div class="orbit-card-overlay">
+              <span class="orbit-question-mark">?</span>
+            </div>
+          </div>
+
+          <!-- 8 Orbiting Badge Icons -->
+          <!-- 1. Rings (Top) -->
+          <div class="orbit-badge badge-top" title="Aliança & Conexão">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="12" r="5"></circle>
+              <circle cx="16" cy="12" r="5"></circle>
+            </svg>
+          </div>
+
+          <!-- 2. Briefcase (Top-Right) -->
+          <div class="orbit-badge badge-top-right" title="Estilo de Vida & Propósito">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+          </div>
+
+          <!-- 3. Trend / Growth (Right) -->
+          <div class="orbit-badge badge-right" title="Evolução & Afinidade">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+              <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>
+          </div>
+
+          <!-- 4. Smiley (Bottom-Right) -->
+          <div class="orbit-badge badge-bottom-right" title="Humor & Sintonia">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+              <line x1="9" y1="9" x2="9.01" y2="9"></line>
+              <line x1="15" y1="9" x2="15.01" y2="9"></line>
+            </svg>
+          </div>
+
+          <!-- 5. Paw (Bottom) -->
+          <div class="orbit-badge badge-bottom" title="Afeto & Convivência">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="15" r="3"></circle>
+              <circle cx="6.5" cy="11.5" r="1.5"></circle>
+              <circle cx="17.5" cy="11.5" r="1.5"></circle>
+              <circle cx="9" cy="7.5" r="1.5"></circle>
+              <circle cx="15" cy="7.5" r="1.5"></circle>
+            </svg>
+          </div>
+
+          <!-- 6. Map Pin (Bottom-Left) -->
+          <div class="orbit-badge badge-bottom-left" title="Destino & Onde se encontrarão">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </div>
+
+          <!-- 7. Target (Left) -->
+          <div class="orbit-badge badge-left" title="Valores Inegociáveis">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="6"></circle>
+              <circle cx="12" cy="12" r="2"></circle>
+            </svg>
+          </div>
+
+          <!-- 8. Infinity (Top-Left) -->
+          <div class="orbit-badge badge-top-left" title="Conexão Eterna de Almas">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18.178 8c5.096 0 5.096 8 0 8-2.67 0-4.67-2.67-6.178-4-1.508 1.33-3.508 4-6.178 4-5.096 0-5.096-8 0-8 2.67 0 4.67 2.67 6.178 4 1.508-1.33 3.508-4 6.178-4z"></path>
+            </svg>
+          </div>
+
+        </div>
+
+        <!-- Main CTA Button -->
+        <div class="hero-cta-wrapper">
+          <button class="btn btn-primary btn-direct-start" data-open-quiz id="directStartBtn">
+            <span>Começar</span>
+          </button>
+        </div>
+
+        <!-- Press / Authority Bar -->
+        <div class="hero-press-bar">
+          <div class="press-label">
+            <span>EM</span>
+            <strong>DESTAQUE</strong>
+          </div>
+          <div class="press-divider"></div>
+          <div class="press-logos">
+            <span class="press-item forbes">Forbes</span>
+            <span class="press-item fast-company">FAST COMPANY</span>
+            <span class="press-item newsweek">Newsweek</span>
+          </div>
+        </div>
+
+        <!-- Legal Disclaimer Note -->
+        <div class="hero-legal-disclaimer">
+          <p>Ao continuar, você concorda com os nossos <a href="/termos.html" target="_blank">Termos e Condições</a> e <a href="/privacidade.html" target="_blank">Aviso de Privacidade</a>.</p>
+          <p class="entertainment-notice">Apenas para fins de entretenimento e exploração de afinidade.</p>
+        </div>
+
       </div>
     </section>
 
