@@ -39,7 +39,7 @@ function construirPromptFlux(respostas) {
   const etnia = mapEtnia[respostas.etnia] || mapEtnia[respostas.descendencia] || "attractive";
   const olhar = mapOlhar[respostas.olhar] || mapOlhar[respostas.traco_olhar] || "gentle eyes";
   const estilo = mapEstilo[respostas.estilo] || mapEstilo[respostas.estilo_visual] || "casual look";
-  
+
   let idade = "28 years old";
   if (respostas.faixa_etaria) {
     const rawFaixa = respostas.faixa_etaria.replace(' anos', '').replace('+', ' and older');

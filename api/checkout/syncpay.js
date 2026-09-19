@@ -37,9 +37,9 @@ module.exports = async function handler(req, res) {
       sessionStore.saveLocalCache();
     }
 
-    // Valor padrão oficial do produto: R$ 5,97
+    // Valor padrão oficial do produto: R$ 19,90
     const envPrice = process.env.PRICE_BRL || process.env.PRICE;
-    let price = 5.97;
+    let price = 19.90;
     if (envPrice) {
       const parsed = parseFloat(String(envPrice).replace(',', '.'));
       // Se a variável de ambiente for válida e diferente do valor antigo de teste (1.00), utiliza o valor configurado
