@@ -1,5 +1,5 @@
 /**
- * AuraSketch AI - High-Converting Interactive Quiz Engine (Spanish)
+ * AuraSketch AI - High-Converting Interactive Quiz Engine
  * Strictly follows the 12 questions across 5 stages and zero-cost security rules.
  */
 
@@ -22,7 +22,7 @@ const quizConfig = {
         {
           key: 'atracao_genero',
           title: '¿Por quién sientes atracción amorosa?',
-          subtitle: 'Define el género base del retrato a dibujar.',
+          subtitle: 'Define el género base del retrato a ser dibujado.',
           options: [
             { label: 'Mujeres', icon: '✦' },
             { label: 'Hombres', icon: '✦' },
@@ -48,7 +48,7 @@ const quizConfig = {
       questions: [
         {
           key: 'descendencia',
-          title: '¿Hay alguna descendencia o fenotipo que visualizas con mayor frecuencia?',
+          title: '¿Hay alguna descendencia o fenotipo que visualices con mayor frecuencia?',
           subtitle: 'Calibra la estructura facial y rasgos arquetípicos.',
           options: [
             { label: 'Latina / Mestiza', icon: '🌿' },
@@ -65,7 +65,7 @@ const quizConfig = {
           subtitle: 'Armoniza la postura y la composición del dibujo.',
           options: [
             { label: 'Clásico y sofisticado', icon: '👔' },
-            { label: 'Desenfadado y casual', icon: '☕' },
+            { label: 'Relajado y casual', icon: '☕' },
             { label: 'Artístico / Alternativo', icon: '🎨' },
             { label: 'Deportivo / Atleta', icon: '⚡' },
             { label: 'Intelectual y minimalista', icon: '📚' }
@@ -79,7 +79,7 @@ const quizConfig = {
             { label: 'Mirada dulce y acogedora', icon: '🕊️' },
             { label: 'Mirada penetrante y misteriosa', icon: '👁️' },
             { label: 'Mirada expresiva y con buen humor', icon: '😄' },
-            { label: 'Mirada serena y segura', icon: '🌊' }
+            { label: 'Mirada serena y confiada', icon: '🌊' }
           ]
         }
       ]
@@ -90,19 +90,19 @@ const quizConfig = {
       questions: [
         {
           key: 'virtude_inegociavel',
-          title: '¿Cuál es la virtud innegociable en la persona indicada para ti?',
+          title: '¿Cuál es la virtud innegociable en la persona adecuada para ti?',
           subtitle: 'Mapeo del arquetipo psicológico complementario.',
           options: [
             { label: 'Lealtad e integridad', icon: '🛡️' },
             { label: 'Buen humor y ligereza', icon: '☀️' },
             { label: 'Inteligencia y ambición', icon: '💡' },
             { label: 'Sensibilidad y escucha activa', icon: '👂' },
-            { label: 'Autenticidad y valentía', icon: '🔥' }
+            { label: 'Autenticidad y coraje', icon: '🔥' }
           ]
         },
         {
           key: 'ritmo_convivencia',
-          title: '¿Cómo describes el ritmo ideal de convivencia en pareja?',
+          title: '¿Cómo describes el ritmo ideal de la convivencia en pareja?',
           subtitle: 'Alinea las variables de armonía comportamental.',
           options: [
             { label: 'Tranquilo y hogareño', icon: '🏡' },
@@ -113,8 +113,8 @@ const quizConfig = {
         },
         {
           key: 'alerta_vermelho',
-          title: '¿Qué actitud es una bandera roja inmediata para ti?',
-          subtitle: 'Filtro para refinamiento del mapa psicométrico.',
+          title: '¿Qué actitud es una alerta roja inmediata para ti?',
+          subtitle: 'Filtro para el refinamiento del mapa psicométrico.',
           options: [
             { label: 'Falta de compromiso', icon: '⚠️' },
             { label: 'Dificultad para demostrar afecto', icon: '🧊' },
@@ -144,8 +144,8 @@ const quizConfig = {
           title: '¿Cuál es la principal meta de vida que quieres construir en conjunto?',
           subtitle: 'Proyección arquetípica a largo plazo.',
           options: [
-            { label: 'Construir una familia', icon: '👨‍👩‍👧' },
-            { label: 'Prosperidad y éxito mutuo', icon: '🔮' },
+            { label: 'Construir familia', icon: '👨‍👩‍👧' },
+            { label: 'Prosperidad y éxito mutuos', icon: '🔮' },
             { label: 'Viajar por el mundo', icon: '✈️' },
             { label: 'Evolución mutua', icon: '🌱' }
           ]
@@ -219,6 +219,12 @@ class QuizEngine {
 
   startQuiz() {
     if (typeof gtag === 'function') gtag('event', 'quiz_started');
+    if (typeof fbq === 'function') {
+      fbq('track', 'ViewContent', {
+        content_name: 'Quiz Alma Gêmea',
+        content_category: 'Astrologia'
+      });
+    }
     this.currentIndex = 0;
     this.answers = {};
     this.currentSessionId = null;
@@ -381,7 +387,7 @@ class QuizEngine {
     submitBtn.addEventListener('click', () => {
       const val = input.value.trim();
       if (val.length < 10) {
-        alert('Por favor, ingresa la fecha completa en formato DD/MM/AAAA.');
+        alert('Por favor, ingresa la fecha completa en el formato DD/MM/AAAA.');
         input.focus();
         return;
       }
@@ -412,17 +418,17 @@ class QuizEngine {
     this.body.innerHTML = `
       <div class="ai-scanning-box quiz-slide-enter">
         <div class="scanner-ring"></div>
-        <h3 class="quiz-question-title" id="scanMainTitle">Cruzando Parámetros Energéticos del Universo...</h3>
+        <h3 class="quiz-question-title" id="scanMainTitle">Cruzando Parámetros Energéticos...</h3>
         <p class="quiz-question-desc" style="max-width: 440px; margin: 0 auto 1.5rem;" id="scanSubTitle">
-          Correlacionando rasgos visuales con el mapa natal y arquetipos de atracción...
+          Correlacionando rasgos visuales con la carta natal y arquetipos de atracción...
         </p>
         <ul class="scan-status-list">
           <li class="scan-status-item" id="stageStep1">
-            <span>✦ Mapeando compatibilidad cósmica...</span>
+            <span>✦ Mapeando compatibilidad comportamental...</span>
             <span class="status-dot"></span>
           </li>
           <li class="scan-status-item" id="stageStep2" style="opacity: 0.35;">
-            <span>✦ Calculando posiciones arquetípicas y sincronicidad astral...</span>
+            <span>✦ Calculando posiciones arquetípicas y sincronicidad...</span>
             <span>Esperando</span>
           </li>
           <li class="scan-status-item" id="stageStep3" style="opacity: 0.35;">
@@ -478,8 +484,8 @@ class QuizEngine {
     const btnSim = document.getElementById('synchroBtnSim');
     const btnCurioso = document.getElementById('synchroBtnCurioso');
 
-    if(btnSim) btnSim.onclick = () => handleAnswer('Sí, totalmente');
-    if(btnCurioso) btnCurioso.onclick = () => handleAnswer('Tengo curiosidad');
+    if (btnSim) btnSim.onclick = () => handleAnswer('Sí, totalmente');
+    if (btnCurioso) btnCurioso.onclick = () => handleAnswer('Tengo curiosidad');
   }
 
   // =========================================================================
@@ -522,6 +528,13 @@ class QuizEngine {
 
   renderPaywallScreen(previewUrl) {
     if (typeof gtag === 'function') gtag('event', 'paywall_reached');
+    if (typeof fbq === 'function') {
+      fbq('track', 'InitiateCheckout', {
+        value: 19.90,
+        currency: 'USD',
+        content_name: 'Esboço Astrológico da Alma Gêmea HD'
+      });
+    }
     if (this.backBtn) this.backBtn.classList.add('hidden');
     const isMale = this.answers.atracao_genero === 'Hombres';
     const finalPreview = previewUrl || (isMale ? '/assets/images/male_sketch.jpg' : '/assets/images/hero_sketch.jpg');
@@ -539,7 +552,7 @@ class QuizEngine {
 
         <h3 class="quiz-question-title" style="font-size: 1.4rem;">¡El Boceto de tu Alma Gemela está Listo!</h3>
         <p class="quiz-question-desc" style="max-width: 440px; margin: 0 auto 1rem;">
-          Basado en tus 12 respuestas y tu mapa arquetípico, el perfil visual y psicológico ha sido concluido con éxito.
+          Con base en tus 12 respuestas y en tu mapa arquetípico, el perfil visual y psicológico fue concluido con éxito.
         </p>
 
         <div class="paywall-preview-card">
@@ -549,12 +562,12 @@ class QuizEngine {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
               <span>Retrato Bloqueado</span>
             </div>
-            <span style="font-size: 0.75rem; opacity: 0.9;">Haz clic abajo para liberar</span>
+            <span style="font-size: 0.75rem; opacity: 0.9;">Haz clic abajo para desbloquear</span>
           </div>
         </div>
 
         <div class="email-input-box">
-          <label for="paywallUserName">¿Cuál es tu nombre?</label>
+          <label for="paywallUserName">¿Cuál es tu primer nombre?</label>
           <input 
             type="text" 
             id="paywallUserName" 
@@ -565,12 +578,12 @@ class QuizEngine {
         </div>
 
         <div class="email-input-box" style="margin-top: 1rem;">
-          <label for="paywallUserEmail">Tu mejor correo electrónico (para seguridad de tu cuenta):</label>
+          <label for="paywallUserEmail">Ingresa tu mejor correo (para la seguridad de tu cuenta):</label>
           <input 
             type="email" 
             id="paywallUserEmail" 
             class="custom-input" 
-            placeholder="tu.email@ejemplo.com"
+            placeholder="tu.correo@ejemplo.com"
             value="${this.answers.userEmail || ''}"
           />
         </div>
@@ -578,21 +591,21 @@ class QuizEngine {
         <div class="lgpd-consent-box" style="margin-top: 1rem; margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 0.6rem;">
           <input type="checkbox" id="lgpdConsent" style="margin-top: 0.25rem; cursor: pointer; width: 1.1rem; height: 1.1rem; flex-shrink: 0; accent-color: var(--primary);">
           <label for="lgpdConsent" style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer; line-height: 1.4; text-align: left;">
-            Declaro que soy mayor de 18 años y acepto los <a href="/es/terminos.html" target="_blank" style="text-decoration: underline; color: var(--primary);">Términos de Uso</a> y la <a href="/es/privacidad.html" target="_blank" style="text-decoration: underline; color: var(--primary);">Política de Privacidad</a>
+            Declaro que soy mayor de 18 años y acepto los <a href="/termos.html" target="_blank" style="text-decoration: underline; color: var(--primary);">Términos de Uso</a> y la <a href="/privacidade.html" target="_blank" style="text-decoration: underline; color: var(--primary);">Política de Privacidad</a> de DreamPerson, consintiendo el tratamiento de mis datos.
           </label>
         </div>
 
         <div style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 0.875rem 1rem; margin-bottom: 1.25rem; text-align: center; font-size: 0.8125rem;">
-          <strong style="color: #e11d48; font-size: 1.05rem; display: block; margin-bottom: 0.5rem;">⚠️ ¡ATENCIÓN! Esta es tu ÚNICA oportunidad de conocer a tu alma gemela</strong>
+          <strong style="color: #e11d48; font-size: 1.05rem; display: block; margin-bottom: 0.5rem;">⚠️ Atención: ¡Esta es tu única oportunidad de conocer a tu alma gemela!</strong>
           <div style="margin-bottom: 0.75rem; display: flex; flex-direction: column; align-items: center;">
             <span style="text-decoration: line-through; color: var(--text-muted); font-size: 0.9rem;">De: $97.00 USD</span>
-            <span style="color: var(--primary); font-size: 1.6rem; font-weight: 800; line-height: 1.2;">Por solo: $19.90 USD</span>
+            <span style="color: var(--primary); font-size: 1.6rem; font-weight: 800; line-height: 1.2;">Por solo $19.90 USD</span>
           </div>
           <div style="font-size: 0.85rem; color: #e11d48; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 0.5rem;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
             La oferta expira en: <span id="paywallOfferTimer">10:00</span>
           </div>
-          <strong style="color: var(--text-headline); display: block; text-align: left; margin-top: 1rem;">Inclusiones en la Liberación Inmediata:</strong>
+          <strong style="color: var(--text-headline); display: block; text-align: left; margin-top: 1rem;">Incluido en el Desbloqueo Inmediato:</strong>
           <ul style="list-style: none; margin-top: 0.35rem; display: flex; flex-direction: column; gap: 0.25rem; color: var(--text-body); text-align: left;">
             <li>✓ Boceto Artístico Guiado por los Astros (sin marca de agua)</li>
             <li>✓ Reporte Psicométrico Descriptivo de Afinidad</li>
@@ -601,14 +614,14 @@ class QuizEngine {
         </div>
 
         <button class="btn btn-primary btn-lg" style="width: 100%; font-size: 1.05rem;" id="paywallCheckoutBtn">
-          <span>¡Desbloquear Mi Retrato Ahora!</span>
+          <span>Desbloquear Mi Retrato Ahora</span>
           <span class="btn-icon">→</span>
         </button>
 
         <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-top: 0.875rem; font-size: 0.75rem; color: var(--text-muted);">
           <span>🔒 Pago Seguro</span>
           <span>•</span>
-          <span>⚡ Liberación Inmediata</span>
+          <span>⚡ Desbloqueo Inmediato</span>
           <span>•</span>
           <span>🛡️ Garantía de 30 Días</span>
         </div>
@@ -645,19 +658,26 @@ class QuizEngine {
 
       const nome = nameInput ? nameInput.value.trim() : '';
       if (!nome) {
-        alert('Por favor, ingresa tu nombre.');
+        alert('Por favor, ingresa tu primer nombre.');
         if (nameInput) nameInput.focus();
         return;
       }
 
       const email = emailInput.value.trim();
       if (!email || !email.includes('@')) {
-        alert('Por favor, ingresa un correo electrónico válido.');
+        alert('Por favor, ingresa un correo válido.');
         emailInput.focus();
         return;
       }
 
       if (typeof gtag === 'function') gtag('event', 'checkout_initiated');
+      if (typeof fbq === 'function') {
+        fbq('track', 'AddPaymentInfo', {
+          value: 19.90,
+          currency: 'USD',
+          content_name: 'Esboço Astrológico da Alma Gêmea HD'
+        });
+      }
 
       this.answers.nome = nome;
       this.answers.userEmail = email;
@@ -672,9 +692,9 @@ class QuizEngine {
     this.body.innerHTML = `
       <div class="ai-scanning-box quiz-slide-enter">
         <div class="scanner-ring"></div>
-        <h3 class="quiz-question-title">Generando Cobro Seguro...</h3>
+        <h3 class="quiz-question-title">Generando cobro seguro...</h3>
         <p class="quiz-question-desc">
-          Conectando con la pasarela para generar tu código exclusivo...
+          Conectando con el portal de pagos para generar tu código exclusivo...
         </p>
       </div>
     `;
@@ -695,7 +715,7 @@ class QuizEngine {
       if (data.success) {
         this.renderPixCheckoutScreen(data);
       } else {
-        alert('Error al generar pago: ' + (data.error || 'Inténtalo de nuevo'));
+        alert('Erro al generar el pago: ' + (data.error || 'Inténtalo de nuevo'));
         this.renderPaywallScreen();
       }
     } catch (err) {
@@ -706,7 +726,7 @@ class QuizEngine {
   }
 
   renderPixCheckoutScreen(checkoutData) {
-    this.stepIndicator.textContent = 'Esperando Pago en Tiempo Real • Liberación Automática';
+    this.stepIndicator.textContent = 'Esperando Pago • Desbloqueo Automático';
 
     const isMale = this.answers.atracao_genero === 'Hombres';
     const previewImg = checkoutData.previewUrl || (isMale ? '/assets/images/male_sketch.jpg' : '/assets/images/hero_sketch.jpg');
@@ -722,7 +742,7 @@ class QuizEngine {
           Realiza tu pago para desbloquear
         </h3>
         <p class="quiz-question-desc" style="max-width: 440px; margin: 0 auto 1rem;">
-          La liberación de tu arte en alta resolución y reporte es <strong>instantánea</strong>.
+          El desbloqueo de tu arte en alta resolución y reporte es <strong>instantáneo</strong>.
         </p>
 
         <!-- Preview do Esboço Borrado com Cadeado -->
@@ -739,16 +759,22 @@ class QuizEngine {
 
         <div class="pix-card-container">
           <div class="pix-price-tag">
-            <span style="font-size: 0.9375rem; color: var(--text-muted); font-weight: 600;">Precio Exclusivo:</span>
-            <span class="pix-price-val">${checkoutData.formattedPrice || '$19.90 USD'}</span>
+            <div class="pix-discount-badge">
+              <span>🔥 80% OFF • Oferta Exclusiva</span>
+            </div>
+            <div class="pix-price-row">
+              <span class="pix-price-old">De $97.00 USD</span>
+              <span class="pix-price-by">por</span>
+              <span class="pix-price-val">${checkoutData.formattedPrice || '$19.90 USD'}</span>
+            </div>
           </div>
 
           <div class="pix-qrcode-box">
-            <img src="${checkoutData.pixQrCode}" alt="Código QR de Pago" id="pixQrImage" />
+            <img src="${checkoutData.pixQrCode}" alt="QR Code SyncPay" id="pixQrImage" />
           </div>
 
           <div style="font-size: 0.8125rem; font-weight: 600; color: var(--text-headline); margin-bottom: 0.35rem; text-align: left;">
-            Código de pago para copiar y pegar:
+            Código Copia y Pega:
           </div>
           <div class="pix-copia-cola-wrap">
             <input type="text" readonly value="${checkoutData.pixCopiaCola}" class="pix-copia-cola-input" id="pixCodeInput" />
@@ -763,8 +789,8 @@ class QuizEngine {
               <span>✦ Cómo pagar:</span>
             </div>
             <ul class="pix-steps-list">
-              <li><span class="num">1.</span> Abre tu aplicación de pago o billetera digital</li>
-              <li><span class="num">2.</span> Elige la opción de pago por código o QR Code</li>
+              <li><span class="num">1.</span> Abre la aplicación de tu banco o billetera digital</li>
+              <li><span class="num">2.</span> Elige <strong>Pagar</strong> > Copia y Pega o Código QR</li>
               <li><span class="num">3.</span> Confirma el pago de ${checkoutData.formattedPrice || '$19.90 USD'}</li>
             </ul>
           </div>
@@ -777,12 +803,12 @@ class QuizEngine {
 
         <div style="display: flex; flex-direction: column; gap: 0.6rem;">
           <button class="btn btn-secondary" id="pixManualCheckBtn" style="width: 100%; font-size: 0.9375rem;">
-            <span>🔄 Ya pagué (Verificar Ahora)</span>
+            <span>🔄 Ya Pagué (Verificar Ahora)</span>
           </button>
         </div>
 
         <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-muted);">
-          🔒 Procesado con seguridad • 100% Encriptado
+          🔒 Procesado de forma segura • 100% Encriptado
         </div>
       </div>
     `;
@@ -876,7 +902,7 @@ class QuizEngine {
         if (manualBtn) {
           manualBtn.innerHTML = '<span>Pago aún pendiente</span>';
           setTimeout(() => {
-            manualBtn.innerHTML = '<span>🔄 Ya pagué (Verificar Ahora)</span>';
+            manualBtn.innerHTML = '<span>🔄 Ya Pagué (Verificar Ahora)</span>';
           }, 2000);
         }
       }
@@ -925,7 +951,7 @@ class QuizEngine {
     this.stopPaymentPolling();
     this.stepIndicator.textContent = '🎉 ¡Retrato Revelado con Éxito!';
 
-    // Evento de Conversión / Compra Final (GA4 & Meta Pixel)
+    // Evento de Conversão / Compra Final (GA4 & Meta Pixel)
     if (typeof gtag === 'function') {
       gtag('event', 'purchase', {
         transaction_id: order.transactionId || order.orderId || ('tx_' + Date.now()),
@@ -933,7 +959,7 @@ class QuizEngine {
         currency: 'USD',
         items: [{
           item_id: 'soulmate_sketch_hd',
-          item_name: 'Boceto Astrológico del Alma Gemela HD',
+          item_name: 'Esboço Astrológico da Alma Gêmea HD',
           price: 19.90,
           quantity: 1
         }]
@@ -944,7 +970,7 @@ class QuizEngine {
       fbq('track', 'Purchase', {
         value: 19.90,
         currency: 'USD',
-        content_name: 'Boceto Astrológico del Alma Gemela HD',
+        content_name: 'Esboço Astrológico da Alma Gêmea HD',
         content_type: 'product'
       });
     }
@@ -952,12 +978,12 @@ class QuizEngine {
     this.body.innerHTML = `
       <div class="order-success-card quiz-slide-enter">
         <div class="section-tag" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.2);">
-          ✓ Pago Confirmado & Arte Renderizada
+          ✓ Pago Confirmado & Arte Renderizado
         </div>
 
         <h3 class="quiz-question-title">Aquí está el Boceto de tu Alma Gemela</h3>
         <p class="quiz-question-desc" style="max-width: 460px; margin: 0 auto 1rem;">
-          Tu archivo en altísima definición fue renderizado y ya está liberado para que lo acceses.
+          Tu archivo en altísima definición fue renderizado y ya está disponible para tu acceso.
         </p>
 
         <div class="revealed-art-frame">
@@ -990,7 +1016,7 @@ class QuizEngine {
           </div>
         ` : ''}
 
-        <a href="${order.resultImageUrl}" download="boceto_alma_gemela.jpg" class="btn btn-primary btn-lg" style="width: 100%;">
+        <a href="${order.resultImageUrl}" download="esboco_alma_gemea.jpg" class="btn btn-primary btn-lg" style="width: 100%;">
           <span>Descargar Retrato Astrológico</span>
           <span class="btn-icon">↓</span>
         </a>
@@ -1002,8 +1028,4 @@ class QuizEngine {
 // Instantiate on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   window.quizEngineInstance = new QuizEngine();
-  // Auto-start quiz on page load to improve funnel conversion
-  setTimeout(() => {
-    window.quizEngineInstance.startQuiz();
-  }, 300);
 });
